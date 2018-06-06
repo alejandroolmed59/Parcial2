@@ -40,16 +40,16 @@ public class centro_Mando{
         }
     }
 
-    public void restar_Oro_jugador(double precio) {
-        this.oro_jugador -= precio;
+    public void operar_Oro_jugador(double precio) {
+        this.oro_jugador += precio;
     }
 
-    public void restar_Piedra_jugador(double precio) {
-        this.piedra_jugador -= precio;
+    public void operar_Piedra_jugador(double precio) {
+        this.piedra_jugador += precio;
     }
 
-    public void restar_Comida_jugador(double precio) {
-        this.comida_jugador -= precio;
+    public void operar_Comida_jugador(double precio) {
+        this.comida_jugador += precio;
     }
 
     public int getVida() {

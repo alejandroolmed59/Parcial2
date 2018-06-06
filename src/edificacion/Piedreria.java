@@ -22,9 +22,9 @@ public class Piedreria extends Edificacion{
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }
-    @Override
-    public int recolectar(){
-        return 500;
+    public centro_Mando recolectar(centro_Mando cm){
+        cm.operar_Piedra_jugador(500);
+        return cm;
     }
     @Override
     public Milicia crearSoldado(Raza raza){

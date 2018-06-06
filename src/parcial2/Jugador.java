@@ -47,13 +47,18 @@ public class Jugador {
         Edificacion e= factory.getEdificacion(leer.next());
         e.Iniciar();
         if(centro_mando.getComida_jugador()>=e.costo_comida && centro_mando.getOro_jugador()>=e.costo_oro && centro_mando.getPiedra_jugador()>= e.costo_piedra){
-            centro_mando.restar_Comida_jugador(e.costo_comida);
-            centro_mando.restar_Oro_jugador(e.costo_oro);
-            centro_mando.restar_Piedra_jugador(e.costo_piedra);
+            centro_mando.operar_Comida_jugador(-e.costo_comida);
+            centro_mando.operar_Oro_jugador(-e.costo_oro);
+            centro_mando.operar_Piedra_jugador(-e.costo_piedra);
             listaEdificiosJugador.add(e);
             System.out.println("Se empezo a construir la edificacion");
         }else{
             System.out.println("Recursos insuficientes");
+        }
+    }
+    public void recolectar(){
+        for(Edificacion e: listaEdificiosJugador){
+            centro_mando= e.recolectar(centro_mando);
         }
     }
     public void crear(String tipo){

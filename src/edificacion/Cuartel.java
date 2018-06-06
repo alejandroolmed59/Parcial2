@@ -24,8 +24,8 @@ public class Cuartel extends Edificacion{
         lista.anniadir(this);
     }
     @Override
-    public int recolectar(){
-        return 0;
+    public centro_Mando recolectar(centro_Mando cm){
+        return null;
     }
     @Override
     public Milicia crearSoldado(Raza raza){

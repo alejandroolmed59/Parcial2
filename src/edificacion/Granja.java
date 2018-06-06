@@ -15,14 +15,16 @@ public class Granja extends Edificacion {
     public void Iniciar(){
         this.vida=70;
         this.costo_comida=500;
+        this.costo_oro=200;
         this.nombre="Granja";
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }
-    @Override
-    public int recolectar(){
-        return 1000;
+    public centro_Mando recolectar(centro_Mando cm){
+        cm.operar_Comida_jugador(1000);
+        return cm;
     }
+    
     @Override
     public Milicia crearSoldado(Raza raza){
         return null;

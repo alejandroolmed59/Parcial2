@@ -41,13 +41,14 @@ public class Parcial2 {
         System.out.println(jugador1.civilizacion.raza);
         System.out.println(jugador1.centro_mando.toString());
         jugador1.construir();
-        jugador1.crear("Milicia");
+        jugador1.recolectar();
+        
+        //jugador1.crear("Milicia");
         System.out.println(jugador1.centro_mando.toString());
         jugador1.construir();  
-        jugador1.crear("Milicia");
-        jugador1.crear("Milicia");
-        jugador1.crear("Milicia");
-        jugador1.mostrarMiliciaJugador();
+        jugador1.recolectar();  
+        System.out.println(jugador1.centro_mando.toString());
+        jugador1.mostrarEdificiosJugador();
     }
     
 }

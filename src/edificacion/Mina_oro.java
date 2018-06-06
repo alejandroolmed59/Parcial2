@@ -23,8 +23,9 @@ public class Mina_oro extends Edificacion{
         lista.anniadir(this);
     }
     @Override
-    public int recolectar(){
-        return 300;
+    public centro_Mando recolectar(centro_Mando cm){
+        cm.operar_Oro_jugador(300);
+        return cm;
     }
     @Override
     public Milicia crearSoldado(Raza raza){

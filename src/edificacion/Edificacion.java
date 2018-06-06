@@ -17,6 +17,6 @@ public abstract class Edificacion {
     public String nombre;
     public double costo_oro=0, costo_piedra=0, costo_comida=0;
     abstract public void Iniciar();
-    abstract public int recolectar();
+    abstract public centro_Mando recolectar(centro_Mando cm);
     abstract public Milicia crearSoldado(Raza raza);
 }
