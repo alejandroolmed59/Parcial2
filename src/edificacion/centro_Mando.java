@@ -5,11 +5,15 @@
  */
 package edificacion;
 
+import java.util.ArrayList;
+import raza.Milicia;
+
 /**
  *
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public class centro_Mando{
+    public ArrayList<Milicia> atacantes= new ArrayList();
     int numeroDeMejora=1;
     int vida=600;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
@@ -84,6 +88,9 @@ public class centro_Mando{
     public void operar_Comida_jugador(double precio) {
         this.comida_jugador += precio;
     }
+    public void operar_Vida_jugador(double vida) {
+        this.vida += vida;
+    }
 
     public int getVida() {
         return vida;
@@ -103,7 +110,7 @@ public class centro_Mando{
 
     @Override
     public String toString() {
-        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\n";
+        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\n"+atacantes+"\n";
     }
 
 }
