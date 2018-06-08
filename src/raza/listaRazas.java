@@ -29,6 +29,11 @@ public class listaRazas {
         return this.listaRaza;
     }
     public void anniadir(Raza r){
+        for(Raza Raz: listaRaza){
+            if(Raz.raza==r.raza){
+                return;
+            }
+        }
         listaRaza.add(r);
     }
     public void mostrar(){

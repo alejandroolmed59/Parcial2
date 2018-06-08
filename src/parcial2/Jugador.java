@@ -30,12 +30,14 @@ public class Jugador {
         AbstractFactory factory;
         factory = FactoryProducer.getFactory("Raza");
         Scanner leer = new Scanner(System.in);
+        System.out.println("Digite su nombre");
+        nombre_jugador= leer.nextLine();
         System.out.println("Eliga una raza");
         listaRazas lista= listaRazas.getInstance();
         lista.mostrar();
         civilizacion= factory.getRaza(leer.next());
         civilizacion.Iniciar();
-        System.out.println(civilizacion.especialista);
+        //System.out.println(civilizacion.especialista);
         centro_mando= new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
     }
     public void construir(){
@@ -67,7 +69,18 @@ public class Jugador {
                 for(Edificacion e: listaEdificiosJugador){
                     if(e.nombre=="Cuartel"){
                         Milicia m=e.crearSoldado(civilizacion);
-                        listaMiliciaJugador.add(m);
+                        if(m.getTipo()=="Soldado" && centro_mando.getComida_jugador()>=civilizacion.costo_comida_soldado && centro_mando.getOro_jugador()>=civilizacion.costo_oro_soldado){
+                            listaMiliciaJugador.add(m);
+                            centro_mando.operar_Comida_jugador(-civilizacion.costo_comida_soldado);
+                            centro_mando.operar_Oro_jugador(-civilizacion.costo_oro_soldado);
+                        }else if(m.getTipo()=="Especialista" && centro_mando.getComida_jugador()>=civilizacion.costo_comida_especialista && centro_mando.getOro_jugador()>=civilizacion.costo_oro_especialista && centro_mando.getPiedra_jugador()>= civilizacion.costo_piedra_especialista){
+                            listaMiliciaJugador.add(m);
+                            centro_mando.operar_Comida_jugador(-civilizacion.costo_comida_especialista);
+                            centro_mando.operar_Oro_jugador(-civilizacion.costo_oro_especialista);
+                            centro_mando.operar_Piedra_jugador(-civilizacion.costo_piedra_especialista);
+                        }else{
+                            System.out.println("No tiene recursos suficientes para crear esta unidad");
+                        }      
                         return;
                     }
                 }

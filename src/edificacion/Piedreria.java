@@ -23,7 +23,11 @@ public class Piedreria extends Edificacion{
         lista.anniadir(this);
     }
     public centro_Mando recolectar(centro_Mando cm){
-        cm.operar_Piedra_jugador(500);
+        if(cm.piedra_jugador+500<cm.max_piedra){
+            cm.operar_Piedra_jugador(500);       
+            return cm;
+        }
+        System.out.println("Se ha alcanzado el maximo de Piedra!!");
         return cm;
     }
     @Override

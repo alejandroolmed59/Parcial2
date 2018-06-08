@@ -20,6 +20,9 @@ public class Teuton extends Raza {
         this.especialista="Caballero de la orden teutonica";
         this.ataque_especialista=200;
         this.vida_especialista=300;
+        this.costo_oro_especialista=300;
+        this.costo_comida_especialista=2000;
+        this.costo_piedra_especialista=500;
         listaRazas lista= listaRazas.getInstance();
         lista.anniadir(this);
     }

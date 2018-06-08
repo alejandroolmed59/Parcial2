@@ -21,7 +21,11 @@ public class Granja extends Edificacion {
         lista.anniadir(this);
     }
     public centro_Mando recolectar(centro_Mando cm){
-        cm.operar_Comida_jugador(1000);
+        if(cm.comida_jugador+1000<cm.max_comida){
+            cm.operar_Comida_jugador(1000);
+            return cm;
+        }
+        System.out.println("Se a alcanzado el maximo de comida!!");   
         return cm;
     }
     

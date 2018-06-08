@@ -10,15 +10,34 @@ package raza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public class Milicia {
-    int ataque,  vida;
-    public Milicia(int ataque, int vida){
+    String tipo;
+    int ataque,  vida, id;
+    public Milicia(String tipo, int ataque, int vida){
+        this.tipo=tipo;
         this.ataque=ataque;
         this.vida=vida;
+        id= Milicia.this.hashCode();
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public int getVida() {
+        return vida;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
     public String toString() {
-        return "Milicia{" + "ataque=" + ataque + ", vida=" + vida + '}';
+        return "Milicia{" + "id=" + id + ", ataque=" + ataque + ", vida=" + vida + '}';
     }
     
 }

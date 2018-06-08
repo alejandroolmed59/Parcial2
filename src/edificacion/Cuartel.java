@@ -25,7 +25,7 @@ public class Cuartel extends Edificacion{
     }
     @Override
     public centro_Mando recolectar(centro_Mando cm){
-        return null;
+        return cm;
     }
     @Override
     public Milicia crearSoldado(Raza raza){
@@ -33,9 +33,9 @@ public class Cuartel extends Edificacion{
         Scanner leer = new Scanner(System.in);
         switch(leer.next()){
             case "Soldado":
-                return new Milicia(raza.ataque, raza.vida);
+                return new Milicia("Soldado",raza.ataque, raza.vida);
             case "Especialista":
-                return new Milicia(raza.ataque_especialista, raza.vida_especialista);
+                return new Milicia("Especialista",raza.ataque_especialista, raza.vida_especialista);
         }
         return null;
     }

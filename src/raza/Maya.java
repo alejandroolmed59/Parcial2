@@ -23,6 +23,9 @@ public class Maya extends Raza{
         this.especialista="Arquero aguila";
         this.ataque_especialista=200;
         this.vida_especialista=150;
+        this.costo_comida_especialista=1700;
+        this.costo_piedra_especialista=500;
+        this.costo_oro_especialista=500;
         listaRazas lista= listaRazas.getInstance();
         lista.anniadir(this);
     }

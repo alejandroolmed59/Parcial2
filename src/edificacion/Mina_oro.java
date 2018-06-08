@@ -24,7 +24,11 @@ public class Mina_oro extends Edificacion{
     }
     @Override
     public centro_Mando recolectar(centro_Mando cm){
-        cm.operar_Oro_jugador(300);
+        if(cm.oro_jugador+300<cm.max_oro){
+            cm.operar_Oro_jugador(300);
+            return cm;
+        }
+        System.out.println("Se ha alcanzado el maximo de Oro!!");
         return cm;
     }
     @Override
