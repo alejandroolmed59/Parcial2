@@ -5,6 +5,7 @@
  */
 package edificacion;
 
+import java.util.ArrayList;
 import raza.Milicia;
 import raza.Raza;
 
@@ -13,6 +14,7 @@ import raza.Raza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public abstract class Edificacion {
+    public ArrayList<Milicia> atacantes= new ArrayList();
     public int vida=0;
     public String nombre;
     public double costo_oro=0, costo_piedra=0, costo_comida=0;

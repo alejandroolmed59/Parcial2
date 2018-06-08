@@ -13,7 +13,7 @@ public class centro_Mando{
     int numeroDeMejora=1;
     int vida=600;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
-    double oro_jugador=320, piedra_jugador=500, comida_jugador=6000;
+    double oro_jugador=32000, piedra_jugador=50000, comida_jugador=60000;
     public centro_Mando(double oro, double piedra, double comida, int vida) {
         this.oro_jugador+= oro;
         this.piedra_jugador+= piedra;
@@ -31,7 +31,8 @@ public class centro_Mando{
                     max_oro= (max_oro*1.1);
                     max_piedra= (max_piedra*1.1);
                     max_comida= (max_comida*1.1);
-                    numeroDeMejora++;                    
+                    numeroDeMejora++;
+                    System.out.println("\u001B[1;34m"+"Has avanzado a la edad Feudal!!. Tu centro de mando se ha mejorado"+"\u001B[0m");
                 }
                 else{
                     System.out.println("No tiene los suficientes recursos para avanzar a la edad feudal");
@@ -46,6 +47,7 @@ public class centro_Mando{
                     max_piedra= (max_piedra*1.3);
                     max_comida= (max_comida*1.3);
                     numeroDeMejora++;
+                    System.out.println("\u001B[1;34m"+"Has avanzado a la edad de los castillos!!. Tu centro de mando se ha mejorado"+"\u001B[0m");
                 }else{
                     System.out.println("No tiene los suficientes recursos para avanzar a la edad de los castillos");
                 }
@@ -59,11 +61,16 @@ public class centro_Mando{
                     max_piedra= (max_piedra*1.5);
                     max_comida= (max_comida*1.5);
                     numeroDeMejora++;
+                    System.out.println("\u001B[1;34m"+"Has avanzado a la edad imperial!!. Tu centro de mando se ha mejorado al maximo"+"\u001B[0m");
                 }else{
                     System.out.println("No tiene los suficientes recursos para avanzar a la edad imperial");
                 }
                 break;
+            case 4:
+                System.out.println("\u001B[1;31m"+" Ya estas en la edad imperial, no puedes avanzar en el tiempo!"+"\u001B[0m");
+                break;
         }
+        
     }
 
     public void operar_Oro_jugador(double precio) {

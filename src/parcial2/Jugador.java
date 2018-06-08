@@ -90,17 +90,43 @@ public class Jugador {
         }
                 
     }
+    public void atacar(ArrayList<Edificacion> edificios_enemigos){
+        int i=1;
+        int opcion=0;
+        int opcion2=0;
+        Scanner leer = new Scanner(System.in);
+        Scanner leer2 = new Scanner(System.in);
+        System.out.println("\u001B[1;31m"+"¡Edificaciones enemigas!"+"\u001B[0m");
+        for(Edificacion e: edificios_enemigos){
+            System.out.println(i+" "+e.nombre+" "+e.vida);
+            i++;
+        }
+        System.out.println("Cual atacara?");
+        opcion=leer.nextInt()-1;
+        System.out.println("A quienes mandaras al ataque?");
+        mostrarMiliciaJugador();
+        if(listaMiliciaJugador.size()!=0){
+            opcion2= leer2.nextInt()-1;
+            //edificios_enemigos.get(opcion).vida-=listaMiliciaJugador.get(opcion2).getAtaque();
+            edificios_enemigos.get(opcion).atacantes.add(listaMiliciaJugador.get(opcion2));
+            listaMiliciaJugador.remove(opcion2);
+            System.out.println("Atacaste a "+edificios_enemigos.get(opcion).nombre+" ,vida="+edificios_enemigos.get(opcion).vida);
+            return;
+        }
+        System.out.println("No tienes milicia preparada para atacar!");
+        return;
+    }
     public void mostrarEdificiosJugador(){
         int i=1;
         for(Edificacion e: listaEdificiosJugador){
-            System.out.println(i+""+e.nombre);
+            System.out.println(i+" "+e.nombre+" ,vida:"+e.vida+" atacantes="+e.atacantes.toString());
             i++;
         }
     }
     public void mostrarMiliciaJugador(){
         int i=1;
         for(Milicia m: listaMiliciaJugador){
-            System.out.println(i+""+m.toString());
+            System.out.println(i+" "+m.toString());
             i++;
         }
     }

@@ -8,8 +8,11 @@ package parcial2;
 import AbstractFactory.AbstractFactory;
 import AbstractFactory.FactoryProducer;
 import edificacion.Edificacion;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import raza.Milicia;
 import raza.Raza;
 
 /**
@@ -17,7 +20,7 @@ import raza.Raza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public class Juego {
-
+    ArrayList<Jugador> listaPlayers = new ArrayList<>();    
     private static Juego Obj;
     private Jugador jugador1;
     private Jugador jugador2;
@@ -51,11 +54,18 @@ public class Juego {
     }
 
     public void Jugar() {
+        turno();
+        System.out.println("Empezaras tu "+listaPlayers.get(0).nombre_jugador);
         while (true) {
-            System.out.println("Turno de "+jugador1.nombre_jugador);
-            menu(jugador1);
-            System.out.println("Turno de "+jugador2.nombre_jugador);
-            menu(jugador2);
+            System.out.println("\u001B[32m"+"Inicia la fase "+fase+"\u001B[0m");
+            System.out.println("Turno de "+"\u001B[31m"+listaPlayers.get(0).nombre_jugador+"\u001B[0m"+"!");
+            menu(listaPlayers.get(0), listaPlayers.get(1).listaEdificiosJugador);
+            System.out.println("Turno de "+"\u001B[34m"+listaPlayers.get(1).nombre_jugador+"\u001B[0m"+"!");
+            menu(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador);
+            
+            System.out.println("\n"+"\u001B[1;31m"+"Las unidades atacaran ahora!"+"\u001B[0m");
+            ataqueFinaldeFase(listaPlayers.get(0).listaEdificiosJugador);
+            ataqueFinaldeFase(listaPlayers.get(1).listaEdificiosJugador);
             fase++;
         }
     }
@@ -72,11 +82,12 @@ public class Juego {
         System.out.println("6. Ver milicia");
         System.out.println("7. Ver edificios");
         System.out.println("8. Ver estado de centro de mando");
-        System.out.println("9. Pasar turno y recolertar materiales");
+        System.out.println("9. Pasar turno y recolectar materiales");
+        System.out.println("10. Defender edificio");
         System.out.println("");
     }
 
-    public void menu(Jugador J) {
+    public void menu(Jugador J, ArrayList<Edificacion> edificios_enemigos) {
         int opcion = 0;
         Scanner leer = new Scanner(System.in);
         while (opcion != 9) {
@@ -85,7 +96,7 @@ public class Juego {
                 opcion = leer.nextInt();
                 switch (opcion) {
                     case 1:
-                        J.civilizacion.Atacar_Fortaleza();
+                        J.atacar(edificios_enemigos);
                         break;
                     case 2:
                         J.centro_mando.mejorar();
@@ -115,6 +126,20 @@ public class Juego {
             } catch (InputMismatchException e) {
                 System.err.println("Por favor, Ingrese un número");
                 leer.nextLine();
+            }
+        }
+    }
+    public void turno(){
+        listaPlayers.add(jugador1);
+        listaPlayers.add(jugador2);
+        Collections.shuffle(listaPlayers);
+    }
+    public void ataqueFinaldeFase(ArrayList<Edificacion> listaEdificiosJugador){
+        for(Edificacion e: listaEdificiosJugador){
+            if(e.atacantes.size()!=0){
+                for(Milicia m: e.atacantes){
+                    e.vida-=m.getAtaque();
+                }
             }
         }
     }

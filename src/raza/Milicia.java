@@ -37,7 +37,7 @@ public class Milicia {
 
     @Override
     public String toString() {
-        return "Milicia{" + "id=" + id + ", ataque=" + ataque + ", vida=" + vida + '}';
+        return "Milicia{" + "id=" + id + " , tipo="+tipo+" , ataque=" + ataque + ", vida=" + vida + '}';
     }
     
 }
