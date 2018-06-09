@@ -18,7 +18,9 @@ public class Milicia {
         this.vida=vida;
         id= Milicia.this.hashCode();
     }
-
+    public void operar_Vida_milicia(int vida){
+        this.vida+= vida;
+    }
     public String getTipo() {
         return tipo;
     }

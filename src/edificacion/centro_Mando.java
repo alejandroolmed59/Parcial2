@@ -110,7 +110,7 @@ public class centro_Mando{
 
     @Override
     public String toString() {
-        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\n"+atacantes+"\n";
+        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\nAtacantes: "+atacantes+"\n";
     }
 
 }

@@ -35,7 +35,7 @@ public class Cuartel extends Edificacion{
             case "Soldado":
                 return new Milicia("Soldado",raza.ataque, raza.vida);
             case "Especialista":
-                return new Milicia("Especialista",raza.ataque_especialista, raza.vida_especialista);
+                return new Milicia(raza.especialista,raza.ataque_especialista, raza.vida_especialista);
         }
         return null;
     }

@@ -78,7 +78,13 @@ public class Jugador {
                             listaMiliciaJugador.add(m);
                             centro_mando.operar_Comida_jugador(-civilizacion.costo_comida_soldado);
                             centro_mando.operar_Oro_jugador(-civilizacion.costo_oro_soldado);
-                        } else if (m.getTipo() == "Especialista" && centro_mando.getComida_jugador() >= civilizacion.costo_comida_especialista && centro_mando.getOro_jugador() >= civilizacion.costo_oro_especialista && centro_mando.getPiedra_jugador() >= civilizacion.costo_piedra_especialista) {
+                        } else if (m.getTipo() == civilizacion.especialista && centro_mando.getComida_jugador() >= civilizacion.costo_comida_especialista && centro_mando.getOro_jugador() >= civilizacion.costo_oro_especialista && centro_mando.getPiedra_jugador() >= civilizacion.costo_piedra_especialista) {
+                            for(Milicia mili: listaMiliciaJugador){
+                                if(mili.getTipo()==civilizacion.especialista){
+                                    System.out.println("NO puedes tener dos "+civilizacion.especialista+" a la vez!!!");
+                                    return;
+                                }
+                            }
                             listaMiliciaJugador.add(m);
                             centro_mando.operar_Comida_jugador(-civilizacion.costo_comida_especialista);
                             centro_mando.operar_Oro_jugador(-civilizacion.costo_oro_especialista);
@@ -97,6 +103,10 @@ public class Jugador {
     }
 
     public void atacar(ArrayList<Edificacion> edificios_enemigos) {
+        if(edificios_enemigos.isEmpty()){
+            System.out.println("El enemigo no posee edificaciones. Es buen momento para atacar"+"\u001B[1;31m"+" el centro de mando!!"+ "\u001B[0m");
+            return;
+        }
         int i = 1;
         int opcion = 0;
         int opcion2 = 0;
@@ -141,6 +151,39 @@ public class Jugador {
         }
         else{
             System.out.println("\u001B[1;31m"+"NO puedes atacar al centro de mando si el enemigo tiene otras edificaciones!!"+"\u001B[0m");
+        }
+    }
+    public void defender(){
+        int opcion = 0;
+        int opcion1 = 0;
+        int opcion2 = 0;
+        int i=1;
+        Scanner leer = new Scanner(System.in);
+        Scanner leer2 = new Scanner(System.in);
+        mostrarEdificiosJugador();
+        System.out.println("A que edificio mandara tropas a defender?");
+        opcion=leer.nextInt()-1;
+        System.out.println("A que unidad atacara");
+        for(Milicia m: listaEdificiosJugador.get(opcion).atacantes){
+            System.out.println(i+" "+m.toString());
+            i++;
+        }
+        opcion1= leer.nextInt()-1;
+        System.out.println("A que unidad mandara?");
+        mostrarMiliciaJugador();
+        opcion2=leer2.nextInt()-1;
+        defenderAux(opcion, opcion1, opcion2);
+    }
+    public void defenderAux(int opcion, int opcion1, int opcion2){
+        listaEdificiosJugador.get(opcion).atacantes.get(opcion1).operar_Vida_milicia(-listaMiliciaJugador.get(opcion2).getAtaque());
+        listaMiliciaJugador.get(opcion2).operar_Vida_milicia(-listaEdificiosJugador.get(opcion).atacantes.get(opcion1).getAtaque());
+        if(listaEdificiosJugador.get(opcion).atacantes.get(opcion1).getVida()<=0){
+            System.out.println("Has eliminado a la unidad enemiga");
+            listaEdificiosJugador.get(opcion).atacantes.remove(opcion1);
+        }
+        if(listaMiliciaJugador.get(opcion2).getVida()<=0){
+            System.out.println("Han eliminado a tu unidad");
+            listaMiliciaJugador.remove(opcion2);
         }
     }
 

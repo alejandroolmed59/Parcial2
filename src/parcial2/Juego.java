@@ -136,8 +136,12 @@ public class Juego {
                     case 9:
                         J.recolectar();
                         break;
+                    case 10:
+                        J.defender();
+                        break;
                     case 11:
                         J.atacarCentrodeMando(edificios_enemigos, cm_enemigo);
+                        break;
                 }
             } catch (InputMismatchException e) {
                 System.err.println("Por favor, Ingrese un número");
