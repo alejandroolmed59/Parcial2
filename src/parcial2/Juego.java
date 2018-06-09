@@ -78,7 +78,9 @@ public class Juego {
             }
             
             listaPlayers.get(0).isAlive();
-            listaPlayers.get(1).isAlive();            
+            listaPlayers.get(1).isAlive();
+            resetFlagdeAtaque(listaPlayers.get(0));
+            resetFlagdeAtaque(listaPlayers.get(1));
             fase++;
         }
     }
@@ -97,7 +99,8 @@ public class Juego {
         System.out.println("8. Ver estado de centro de mando");
         System.out.println("9. Pasar turno y recolectar materiales");
         System.out.println("10. Defender edificio");
-        System.out.println("\u001B[35m"+"11. Atacar centro de mando"+"\u001B[0m");
+        System.out.println("11. Defender centro de mando");
+        System.out.println("\u001B[35m"+"12. Atacar centro de mando"+"\u001B[0m");
         System.out.println("");
     }
 
@@ -140,6 +143,9 @@ public class Juego {
                         J.defender();
                         break;
                     case 11:
+                        J.defenderCentrodeMando();
+                        break;
+                    case 12:
                         J.atacarCentrodeMando(edificios_enemigos, cm_enemigo);
                         break;
                 }
@@ -167,6 +173,11 @@ public class Juego {
             if (cm.getVida()<=0){
                 flag_FindeJuego=1;
             }
+        }
+    }
+    public void resetFlagdeAtaque(Jugador j){
+        for(Milicia m: j.listaMiliciaJugador){
+            m.setFlagAtaque(0);
         }
     }
 }

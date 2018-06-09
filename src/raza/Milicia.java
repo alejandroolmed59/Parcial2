@@ -11,7 +11,16 @@ package raza;
  */
 public class Milicia {
     String tipo;
-    int ataque,  vida, id;
+    int ataque,  vida, id, flagAtaque=0;
+
+    public int getFlagAtaque() {
+        return flagAtaque;
+    }
+
+    public void setFlagAtaque(int flagAtaque) {
+        this.flagAtaque = flagAtaque;
+    }
+    
     public Milicia(String tipo, int ataque, int vida){
         this.tipo=tipo;
         this.ataque=ataque;
