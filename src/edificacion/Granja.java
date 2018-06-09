@@ -17,6 +17,7 @@ public class Granja extends Edificacion {
         this.costo_comida=500;
         this.costo_oro=200;
         this.nombre="Granja";
+        this.cooldown=0;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }

@@ -41,7 +41,7 @@ public class listaEdificaciones {
         int i=1;
         System.out.println("-----Edificios disponibles-------");
         for(Edificacion e: listaEdificaciones){
-            System.out.println(i+" "+e.nombre+" vida: "+e.vida+". Costo: Oro="+e.costo_oro+" Piedra= "+e.costo_piedra+" Comida= "+e.costo_comida);
+            System.out.println(i+" "+e.nombre+" vida: "+e.vida+". Costo: Oro="+e.costo_oro+" Piedra= "+e.costo_piedra+" Comida= "+e.costo_comida+" Tiempo de espera="+e.cooldown);
             i++;
         }
     }

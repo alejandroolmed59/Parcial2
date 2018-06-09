@@ -15,7 +15,7 @@ import raza.Raza;
  */
 public abstract class Edificacion {
     public ArrayList<Milicia> atacantes= new ArrayList();
-    public int vida=0;
+    public int vida=0, cooldown=0;
     public String nombre;
     public double costo_oro=0, costo_piedra=0, costo_comida=0;
     abstract public void Iniciar();

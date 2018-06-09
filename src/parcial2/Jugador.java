@@ -12,6 +12,8 @@ import edificacion.centro_Mando;
 import edificacion.listaEdificaciones;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import raza.Raza;
 import raza.Milicia;
 import raza.listaRazas;
@@ -26,6 +28,7 @@ public class Jugador {
     protected Raza civilizacion;
     protected centro_Mando centro_mando;
     protected ArrayList<Edificacion> listaEdificiosJugador = new ArrayList<>();
+    protected Map<Edificacion, Integer> mapadeEspera = new HashMap<>();
     protected ArrayList<Milicia> listaMiliciaJugador = new ArrayList<>();
     protected ArrayList<ArrayList<Integer>> listaDefensas = new ArrayList<>();
 
@@ -44,7 +47,7 @@ public class Jugador {
         centro_mando = new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
     }
 
-    public void construir() {
+    public void construir(int fase) {
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.mostrar();
         Scanner leer = new Scanner(System.in);
@@ -56,8 +59,14 @@ public class Jugador {
             centro_mando.operar_Comida_jugador(-e.costo_comida);
             centro_mando.operar_Oro_jugador(-e.costo_oro);
             centro_mando.operar_Piedra_jugador(-e.costo_piedra);
-            listaEdificiosJugador.add(e);
-            System.out.println("Se empezo a construir la edificacion");
+            int espera= (e.cooldown+fase);
+            //listaEdificiosJugador.add(e);
+            if(espera==0){
+                listaEdificiosJugador.add(e);
+            }else{
+            mapadeEspera.put(e, espera);
+            System.out.println("Se empezo a construir la edificacion, estara lista dentro de "+e.cooldown+" fase/s, es decir la fase "+(espera));
+            }
         } else {
             System.out.println("Recursos insuficientes");
         }

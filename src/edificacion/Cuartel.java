@@ -20,6 +20,7 @@ public class Cuartel extends Edificacion{
         this.nombre="Cuartel";
         this.costo_comida=500;
         this.costo_oro=150;
+        this.cooldown=2;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }

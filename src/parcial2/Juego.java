@@ -12,6 +12,7 @@ import edificacion.centro_Mando;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 import raza.Milicia;
 import raza.Raza;
@@ -61,8 +62,10 @@ public class Juego {
         while (true) {
             System.out.println("\u001B[32m"+"Inicia la fase "+fase+"\u001B[0m");
             System.out.println("Turno de "+"\u001B[31m"+listaPlayers.get(0).nombre_jugador+"\u001B[0m"+"!");
+            construir(listaPlayers.get(0));
             menu(listaPlayers.get(0), listaPlayers.get(1).listaEdificiosJugador, listaPlayers.get(1).centro_mando);
             System.out.println("Turno de "+"\u001B[34m"+listaPlayers.get(1).nombre_jugador+"\u001B[0m"+"!");
+            construir(listaPlayers.get(1));
             menu(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
             
             System.out.println("\n"+"\u001B[1;31m"+"Las unidades atacaran ahora!"+"\u001B[0m");
@@ -122,7 +125,7 @@ public class Juego {
                         J.crear("Milicia");
                         break;
                     case 4:
-                        J.construir();
+                        J.construir(fase);
                         break;
                     case 5:
                         //J.crear("Vehiculo"); FALTA ANNIADIR
@@ -179,5 +182,15 @@ public class Juego {
         for(Milicia m: j.listaMiliciaJugador){
             m.setFlagAtaque(0);
         }
+    }
+    public void construir(Jugador j){
+        int i=0;
+        for (Map.Entry<Edificacion, Integer> entry : j.mapadeEspera.entrySet()) {
+            if(entry.getValue()==fase){
+                j.listaEdificiosJugador.add(entry.getKey());
+                System.out.println("Se ha terminado de construir "+entry.getKey().nombre+" , "+j.nombre_jugador);
+                i++;
+            }
+        }        
     }
 }

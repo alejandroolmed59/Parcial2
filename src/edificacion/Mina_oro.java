@@ -19,6 +19,7 @@ public class Mina_oro extends Edificacion{
         this.nombre="Mina de oro";
         this.costo_oro=150;
         this.costo_piedra=50;
+        this.cooldown=2;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }

@@ -19,6 +19,7 @@ public class Piedreria extends Edificacion{
         this.nombre="Piedreria";
         this.costo_piedra=100;
         this.costo_oro=100;
+        this.cooldown=1;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }
