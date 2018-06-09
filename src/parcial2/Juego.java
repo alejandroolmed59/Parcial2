@@ -32,20 +32,25 @@ public class Juego {
     private Juego() {
         AbstractFactory factory;
         factory = FactoryProducer.getFactory("Raza");
-        Raza maya = factory.getRaza("Teuton");
-        Raza teu = factory.getRaza("Maya");
-        teu.Iniciar();
+        Raza maya = factory.getRaza(1);
+        Raza teu = factory.getRaza(2);
         maya.Iniciar();
+        teu.Iniciar();
         factory = FactoryProducer.getFactory("Edificacion");
-        Edificacion c = factory.getEdificacion("Cuartel");
-        Edificacion g = factory.getEdificacion("Granja");
-        Edificacion m = factory.getEdificacion("Mina");
-        Edificacion p = factory.getEdificacion("Piedreria");
+        Edificacion c = factory.getEdificacion(1);
+        Edificacion g = factory.getEdificacion(2);
+        Edificacion m = factory.getEdificacion(3);
+        Edificacion p = factory.getEdificacion(4);
+        Edificacion cas= factory.getEdificacion(5);
+        Edificacion mar= factory.getEdificacion(6);
         c.Iniciar();
         g.Iniciar();
         m.Iniciar();
         p.Iniciar();
+        cas.Iniciar();
+        mar.Iniciar();
         jugador1 = new Jugador();
+        System.out.println("");
         jugador2 = new Jugador();
     }
 
@@ -63,9 +68,17 @@ public class Juego {
             System.out.println("\u001B[32m"+"Inicia la fase "+fase+"\u001B[0m");
             System.out.println("Turno de "+"\u001B[31m"+listaPlayers.get(0).nombre_jugador+"\u001B[0m"+"!");
             construir(listaPlayers.get(0));
+            if(flag_FindeJuego==1){
+                System.out.println("\u001B[1;34m"+listaPlayers.get(0).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
+                return;
+            }
             menu(listaPlayers.get(0), listaPlayers.get(1).listaEdificiosJugador, listaPlayers.get(1).centro_mando);
             System.out.println("Turno de "+"\u001B[34m"+listaPlayers.get(1).nombre_jugador+"\u001B[0m"+"!");
             construir(listaPlayers.get(1));
+            if(flag_FindeJuego==1){
+                System.out.println("\u001B[1;34m"+listaPlayers.get(1).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
+                return;
+            }
             menu(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
             
             System.out.println("\n"+"\u001B[1;31m"+"Las unidades atacaran ahora!"+"\u001B[0m");
@@ -189,8 +202,12 @@ public class Juego {
             if(entry.getValue()==fase){
                 j.listaEdificiosJugador.add(entry.getKey());
                 System.out.println("Se ha terminado de construir "+entry.getKey().nombre+" , "+j.nombre_jugador);
+                if(entry.getKey().nombre=="\u001B[33m"+"MARAVILLA"+"\u001B[0m"){
+                    flag_FindeJuego=1;
+                    return;
+                }
                 i++;
             }
-        }        
+        }      
     }
 }

@@ -38,10 +38,10 @@ public class Jugador {
         Scanner leer = new Scanner(System.in);
         System.out.println("Digite su nombre");
         nombre_jugador = leer.nextLine();
-        System.out.println("Eliga una raza");
+        System.out.println("-------Eliga una raza---------\n");
         listaRazas lista = listaRazas.getInstance();
         lista.mostrar();
-        civilizacion = factory.getRaza(leer.next());
+        civilizacion = factory.getRaza(leer.nextInt());
         civilizacion.Iniciar();
         //System.out.println(civilizacion.especialista);
         centro_mando = new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
@@ -53,8 +53,16 @@ public class Jugador {
         Scanner leer = new Scanner(System.in);
         AbstractFactory factory;
         factory = FactoryProducer.getFactory("Edificacion");
-        Edificacion e = factory.getEdificacion(leer.next());
+        Edificacion e = factory.getEdificacion(leer.nextInt());
         e.Iniciar();
+        if(e.nombre=="Castillo" && centro_mando.numeroDeMejora<3){
+            System.out.println("El castillo solo se puede construir en la edad de los Castillos!");
+            return;
+        }
+        if(e.nombre=="\u001B[33m"+"MARAVILLA"+"\u001B[0m" && centro_mando.numeroDeMejora<4){
+            System.out.println("La MARAVILLA solo se puede construir en la edad imperial!");
+            return;
+        }
         if (centro_mando.getComida_jugador() >= e.costo_comida && centro_mando.getOro_jugador() >= e.costo_oro && centro_mando.getPiedra_jugador() >= e.costo_piedra) {
             centro_mando.operar_Comida_jugador(-e.costo_comida);
             centro_mando.operar_Oro_jugador(-e.costo_oro);
@@ -173,6 +181,10 @@ public class Jugador {
         mostrarEdificiosJugador();
         System.out.println("¿A que edificio mandara tropas a defender?");
         opcion = leer.nextInt() - 1;
+        if(listaEdificiosJugador.get(opcion).atacantes.isEmpty()){
+            System.out.println("No estas siendo atacado");
+            return;
+        }
         System.out.println("¿A que unidad atacara");
         for (Milicia m : listaEdificiosJugador.get(opcion).atacantes) {
             System.out.println(i + " " + m.toString());

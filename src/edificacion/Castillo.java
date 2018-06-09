@@ -1,0 +1,52 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package edificacion;
+
+import raza.Milicia;
+import raza.Raza;
+
+/**
+ *
+ * @author Alejandro Olmedo <00097017@uca.edu.sv>
+ */
+public class Castillo extends Edificacion {
+    @Override
+    public void Iniciar(){
+        this.vida=1200;
+        this.costo_comida=5000;
+        this.costo_oro=1500;
+        this.costo_piedra=2500;
+        this.nombre="Castillo";
+        this.edad_minima="\u001B[1;31m"+"Exclusivo de la edad de los castillos"+"\u001B[0m";
+        this.cooldown=4;
+        listaEdificaciones lista = listaEdificaciones.getInstance();
+        lista.anniadir(this);
+    }
+    public centro_Mando recolectar(centro_Mando cm){
+        if(cm.comida_jugador+10000<cm.max_comida){
+            cm.operar_Comida_jugador(10000);
+        }else{
+            System.out.println("Se a alcanzado el maximo de comida!!");
+        }
+        if(cm.oro_jugador+3000<cm.max_oro){
+            cm.operar_Oro_jugador(3000);
+        }else{
+            System.out.println("Se a alcanzado el maximo de cro!!");
+        }
+        if(cm.piedra_jugador+5000<cm.max_piedra){
+            cm.operar_Piedra_jugador(10000);
+        }else{
+            System.out.println("Se a alcanzado el maximo de piedra!!");
+        }  
+        return cm;
+    }
+    
+    @Override
+    public Milicia crearSoldado(Raza raza){
+        return null;
+    }
+    
+}

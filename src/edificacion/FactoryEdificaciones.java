@@ -12,21 +12,25 @@ import raza.Raza;
  */
 public class FactoryEdificaciones implements AbstractFactory {
     @Override
-    public Edificacion getEdificacion(String tipo){
+    public Edificacion getEdificacion(int tipo){
         switch(tipo){
-            case "Mina":
-                return new Mina_oro();
-            case "Granja":
-                return new Granja();
-            case "Piedreria":
-                return new Piedreria();
-            case "Cuartel":
+            case 1:
                 return new Cuartel();
+            case 2:
+                return new Granja();
+            case 3:
+                return new Mina_oro();   
+            case 4:
+                return new Piedreria();
+            case 5:
+                return new Castillo();
+            case 6:
+                return new Maravilla();
         }
         return null;
     }
     @Override
-    public Raza getRaza(String tipo){
+    public Raza getRaza(int tipo){
         return null;
     }
 }

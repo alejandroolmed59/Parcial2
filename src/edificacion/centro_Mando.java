@@ -14,7 +14,7 @@ import raza.Milicia;
  */
 public class centro_Mando{
     public ArrayList<Milicia> atacantes= new ArrayList();
-    int numeroDeMejora=1;
+    public int numeroDeMejora=1;
     int vida=600;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
     double oro_jugador=32000, piedra_jugador=50000, comida_jugador=60000;

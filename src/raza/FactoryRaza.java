@@ -12,17 +12,17 @@ import edificacion.Edificacion;
  */
 public class FactoryRaza implements AbstractFactory {
     @Override
-    public Raza getRaza(String tipo){
+    public Raza getRaza(int tipo){
         switch(tipo){
-            case "Teuton":
-                return new Teuton();
-            case "Maya":
+            case 1:
                 return new Maya();
+            case 2:
+                return new Teuton();  
     }
         return null;
     }
     @Override
-    public Edificacion getEdificacion(String tipo){
+    public Edificacion getEdificacion(int tipo){
         return null;
     }
 }

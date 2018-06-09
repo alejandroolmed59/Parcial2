@@ -11,6 +11,6 @@ import raza.Raza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public interface AbstractFactory {
-    Raza getRaza(String tipo);
-    Edificacion getEdificacion(String tipo);
+    Raza getRaza(int tipo);
+    Edificacion getEdificacion(int tipo);
 }
