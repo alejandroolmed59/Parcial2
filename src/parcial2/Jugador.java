@@ -43,7 +43,6 @@ public class Jugador {
         lista.mostrar();
         civilizacion = factory.getRaza(leer.nextInt());
         civilizacion.Iniciar();
-        //System.out.println(civilizacion.especialista);
         centro_mando = new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
     }
 
@@ -144,7 +143,7 @@ public class Jugador {
             //edificios_enemigos.get(opcion).vida-=listaMiliciaJugador.get(opcion2).getAtaque();
             edificios_enemigos.get(opcion).atacantes.add(listaMiliciaJugador.get(opcion2));
             listaMiliciaJugador.remove(opcion2);
-            System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " al final de la fase" + " ,vida=" + edificios_enemigos.get(opcion).vida);
+            System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " al principio de tu siguiente turno" + " ,vida=" + edificios_enemigos.get(opcion).vida);
             return;
         }
         System.out.println("No tienes milicia preparada para atacar!");
@@ -161,7 +160,7 @@ public class Jugador {
                 opcion = leer.nextInt() - 1;
                 cm_enemigo.atacantes.add(listaMiliciaJugador.get(opcion));
                 listaMiliciaJugador.remove(opcion);
-                System.out.println("Atacaras al centro de mando al final de la fase" + " ,vida=" + cm_enemigo.getVida());
+                System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
                 return;
             }
             System.out.println("No tienes milicia preparada para atacar!");

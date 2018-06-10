@@ -20,7 +20,7 @@ public class Castillo extends Edificacion {
         this.costo_oro=1500;
         this.costo_piedra=2500;
         this.nombre="Castillo";
-        this.edad_minima="\u001B[1;31m"+"Exclusivo de la edad de los castillos"+"\u001B[0m";
+        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad de los castillos"+"\u001B[0m";
         this.cooldown=4;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);

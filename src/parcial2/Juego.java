@@ -22,8 +22,9 @@ import raza.Raza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public class Juego {
-    int flag_FindeJuego=0;
-    ArrayList<Jugador> listaPlayers = new ArrayList<>();    
+
+    int flag_FindeJuego = 0;
+    ArrayList<Jugador> listaPlayers = new ArrayList<>();
     private static Juego Obj;
     private Jugador jugador1;
     private Jugador jugador2;
@@ -41,8 +42,8 @@ public class Juego {
         Edificacion g = factory.getEdificacion(2);
         Edificacion m = factory.getEdificacion(3);
         Edificacion p = factory.getEdificacion(4);
-        Edificacion cas= factory.getEdificacion(5);
-        Edificacion mar= factory.getEdificacion(6);
+        Edificacion cas = factory.getEdificacion(5);
+        Edificacion mar = factory.getEdificacion(6);
         c.Iniciar();
         g.Iniciar();
         m.Iniciar();
@@ -63,38 +64,30 @@ public class Juego {
 
     public void Jugar() {
         turno();
-        System.out.println("Empezaras tu "+listaPlayers.get(0).nombre_jugador);
+        System.out.println("Empezaras tu " + listaPlayers.get(0).nombre_jugador);
         while (true) {
-            System.out.println("\u001B[32m"+"Inicia la fase "+fase+"\u001B[0m");
-            System.out.println("Turno de "+"\u001B[31m"+listaPlayers.get(0).nombre_jugador+"\u001B[0m"+"!");
+            System.out.println("\u001B[32m" + "Inicia la fase " + fase + "\u001B[0m");
+
+            System.out.println("Turno de " + "\u001B[31m" + listaPlayers.get(0).nombre_jugador + "\u001B[0m" + "!");
             construir(listaPlayers.get(0));
-            if(flag_FindeJuego==1){
-                System.out.println("\u001B[1;34m"+listaPlayers.get(0).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
+            ataqueInicioTurno(listaPlayers.get(0), listaPlayers.get(1).listaEdificiosJugador, listaPlayers.get(1).centro_mando);
+            listaPlayers.get(1).isAlive();
+            if (flag_FindeJuego == 1) {
+                System.out.println("\u001B[1;34m" + listaPlayers.get(0).nombre_jugador + " HA GANADO LA PARTIDA" + "\u001B[0m");
                 return;
             }
             menu(listaPlayers.get(0), listaPlayers.get(1).listaEdificiosJugador, listaPlayers.get(1).centro_mando);
-            System.out.println("Turno de "+"\u001B[34m"+listaPlayers.get(1).nombre_jugador+"\u001B[0m"+"!");
+
+            System.out.println("Turno de " + "\u001B[34m" + listaPlayers.get(1).nombre_jugador + "\u001B[0m" + "!");
             construir(listaPlayers.get(1));
-            if(flag_FindeJuego==1){
-                System.out.println("\u001B[1;34m"+listaPlayers.get(1).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
+            ataqueInicioTurno(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
+            listaPlayers.get(0).isAlive();
+            if (flag_FindeJuego == 1) {
+                System.out.println("\u001B[1;34m" + listaPlayers.get(1).nombre_jugador + " HA GANADO LA PARTIDA" + "\u001B[0m");
                 return;
             }
             menu(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
-            
-            System.out.println("\n"+"\u001B[1;31m"+"Las unidades atacaran ahora!"+"\u001B[0m");
-            ataqueFinaldeFase(listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
-            if(flag_FindeJuego==1){
-                System.out.println("\u001B[1;34m"+listaPlayers.get(1).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
-                return;
-            }
-            ataqueFinaldeFase(listaPlayers.get(1).listaEdificiosJugador, listaPlayers.get(1).centro_mando);
-            if(flag_FindeJuego==1){
-                System.out.println("\u001B[1;31m"+listaPlayers.get(0).nombre_jugador+" HA GANADO LA PARTIDA"+"\u001B[0m");
-                return;
-            }
-            
-            listaPlayers.get(0).isAlive();
-            listaPlayers.get(1).isAlive();
+           
             resetFlagdeAtaque(listaPlayers.get(0));
             resetFlagdeAtaque(listaPlayers.get(1));
             fase++;
@@ -116,7 +109,7 @@ public class Juego {
         System.out.println("9. Pasar turno y recolectar materiales");
         System.out.println("10. Defender edificio");
         System.out.println("11. Defender centro de mando");
-        System.out.println("\u001B[35m"+"12. Atacar centro de mando"+"\u001B[0m");
+        System.out.println("\u001B[35m" + "12. Atacar centro de mando" + "\u001B[0m");
         System.out.println("");
     }
 
@@ -171,43 +164,57 @@ public class Juego {
             }
         }
     }
-    public void turno(){
+
+    public void turno() {
         listaPlayers.add(jugador1);
         listaPlayers.add(jugador2);
         Collections.shuffle(listaPlayers);
     }
-    public void ataqueFinaldeFase(ArrayList<Edificacion> listaEdificiosJugador, centro_Mando cm){
-        for(Edificacion e: listaEdificiosJugador){
-            if(e.atacantes.size()!=0){
-                for(Milicia m: e.atacantes){
-                    e.vida-=m.getAtaque();
+
+    public void ataqueInicioTurno(Jugador j, ArrayList<Edificacion> listaEdificiosJugador, centro_Mando cm) {
+        int flagHechiza1=0;
+        int flagHechiza2=0;
+        for (Edificacion e : listaEdificiosJugador) {
+            if (e.atacantes.size() != 0) {
+                if(flagHechiza1==0){
+                    System.out.println("Tus unidades "+j.nombre_jugador+" atacaran a las edificaciones enemigas ahora!");
+                    flagHechiza1=1;
+                }
+                for (Milicia m : e.atacantes) {
+                    e.vida -= m.getAtaque();
                 }
             }
         }
-        for(Milicia m: cm.atacantes){
+        for (Milicia m : cm.atacantes) {
+            if(flagHechiza2==0){
+                System.out.println("Tus unidades "+j.nombre_jugador+" atacaran al centro de mando enemigo ahora!");
+                flagHechiza2=1;
+            }
             cm.operar_Vida_jugador(-m.getAtaque());
-            if (cm.getVida()<=0){
-                flag_FindeJuego=1;
+            if (cm.getVida() <= 0) {
+                flag_FindeJuego = 1;
             }
         }
     }
-    public void resetFlagdeAtaque(Jugador j){
-        for(Milicia m: j.listaMiliciaJugador){
+
+    public void resetFlagdeAtaque(Jugador j) {
+        for (Milicia m : j.listaMiliciaJugador) {
             m.setFlagAtaque(0);
         }
     }
-    public void construir(Jugador j){
-        int i=0;
+
+    public void construir(Jugador j) {
+        int i = 0;
         for (Map.Entry<Edificacion, Integer> entry : j.mapadeEspera.entrySet()) {
-            if(entry.getValue()==fase){
+            if (entry.getValue() == fase) {
                 j.listaEdificiosJugador.add(entry.getKey());
-                System.out.println("Se ha terminado de construir "+entry.getKey().nombre+" , "+j.nombre_jugador);
-                if(entry.getKey().nombre=="\u001B[33m"+"MARAVILLA"+"\u001B[0m"){
-                    flag_FindeJuego=1;
+                System.out.println("Se ha terminado de construir " + entry.getKey().nombre + " , " + j.nombre_jugador);
+                if (entry.getKey().nombre == "\u001B[33m" + "MARAVILLA" + "\u001B[0m") {
+                    flag_FindeJuego = 1;
                     return;
                 }
                 i++;
             }
-        }      
+        }
     }
 }

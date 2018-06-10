@@ -20,7 +20,7 @@ public class Maravilla extends Edificacion {
         this.costo_oro=6000;
         this.costo_piedra=10000;
         this.nombre="\u001B[33m"+"MARAVILLA"+"\u001B[0m";
-        this.edad_minima="\u001B[1;31m"+"Exclusivo de la edad imperial- Concede la victoria!"+"\u001B[0m";
+        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad imperial- Concede la victoria!"+"\u001B[0m";
         this.cooldown=5;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
