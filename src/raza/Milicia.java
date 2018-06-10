@@ -11,7 +11,7 @@ package raza;
  */
 public class Milicia {
     String tipo;
-    int ataque,  vida, id, flagAtaque=0;
+    int ataque,  vida, id, flagAtaque=1;
 
     public int getFlagAtaque() {
         return flagAtaque;
@@ -27,7 +27,7 @@ public class Milicia {
         this.vida=vida;
         id= Milicia.this.hashCode();
     }
-    public void operar_Vida_milicia(int vida){
+    public void operar_Vida(int vida){
         this.vida+= vida;
     }
     public String getTipo() {

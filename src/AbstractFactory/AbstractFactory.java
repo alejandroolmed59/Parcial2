@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package AbstractFactory;
+import Vehiculo.Vehiculo;
 import edificacion.Edificacion;
 import raza.Raza;
 /**
@@ -13,4 +14,5 @@ import raza.Raza;
 public interface AbstractFactory {
     Raza getRaza(int tipo);
     Edificacion getEdificacion(int tipo);
+    Vehiculo getVehiculo(int tipo);
 }

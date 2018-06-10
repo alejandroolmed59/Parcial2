@@ -5,6 +5,7 @@
  */
 package edificacion;
 
+import Vehiculo.Vehiculo;
 import java.util.ArrayList;
 import raza.Milicia;
 
@@ -14,6 +15,7 @@ import raza.Milicia;
  */
 public class centro_Mando{
     public ArrayList<Milicia> atacantes= new ArrayList();
+    public ArrayList<Vehiculo> atacantes_Vehiculo= new ArrayList();
     public int numeroDeMejora=1;
     int vida=600;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
@@ -110,7 +112,7 @@ public class centro_Mando{
 
     @Override
     public String toString() {
-        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\nAtacantes: "+atacantes+"\n";
+        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\nMilicia atacantes: "+atacantes+"\nVehiculos atacantes: "+atacantes_Vehiculo+"\n";
     }
 
 }

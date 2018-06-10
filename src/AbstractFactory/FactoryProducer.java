@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package AbstractFactory;
+import Vehiculo.FactoryVehiculos;
 import edificacion.FactoryEdificaciones;
 import raza.FactoryRaza;
 /**
@@ -17,6 +18,8 @@ public class FactoryProducer {
                 return new FactoryRaza();
             case "Edificacion":
                 return new FactoryEdificaciones();
+            case "Vehiculo":
+                return new FactoryVehiculos();
         }
         return null;
     }

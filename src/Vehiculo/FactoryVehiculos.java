@@ -3,31 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package raza;
+package Vehiculo;
+
 import AbstractFactory.AbstractFactory;
-import Vehiculo.Vehiculo;
 import edificacion.Edificacion;
+import raza.Raza;
+
 /**
  *
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
-public class FactoryRaza implements AbstractFactory {
+public class FactoryVehiculos implements AbstractFactory{
     @Override
-    public Raza getRaza(int tipo){
+    public Vehiculo getVehiculo(int tipo){
         switch(tipo){
             case 1:
-                return new Maya();
+                return new Trebuchet();
             case 2:
-                return new Teuton();  
+                return new Cannion();
+        }
+        return null;
     }
+    @Override
+    public Raza getRaza(int tipo){
         return null;
     }
     @Override
     public Edificacion getEdificacion(int tipo){
-        return null;
-    }
-    @Override
-    public Vehiculo getVehiculo(int tipo){
         return null;
     }
 }

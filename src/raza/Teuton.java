@@ -26,8 +26,4 @@ public class Teuton extends Raza {
         listaRazas lista= listaRazas.getInstance();
         lista.anniadir(this);
     }
-    @Override
-    public void Atacar_Fortaleza(){
-        System.out.println("Bru");
-    }
 }

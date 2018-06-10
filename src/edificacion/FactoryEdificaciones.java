@@ -5,6 +5,7 @@
  */
 package edificacion;
 import AbstractFactory.AbstractFactory;
+import Vehiculo.Vehiculo;
 import raza.Raza;
 /**
  *
@@ -23,14 +24,20 @@ public class FactoryEdificaciones implements AbstractFactory {
             case 4:
                 return new Piedreria();
             case 5:
-                return new Castillo();
+                return new Taller_vehiculos();
             case 6:
+                return new Castillo();
+            case 7:
                 return new Maravilla();
         }
         return null;
     }
     @Override
     public Raza getRaza(int tipo){
+        return null;
+    }
+    @Override
+    public Vehiculo getVehiculo(int tipo){
         return null;
     }
 }

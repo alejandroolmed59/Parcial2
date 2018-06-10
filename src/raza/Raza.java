@@ -14,5 +14,4 @@ public abstract class Raza {
     public double  oroBonus=0, piedraBonus=0, comidaBonus=0, costo_oro_soldado=150, costo_piedra_soldado=0, costo_comida_soldado=500,costo_oro_especialista=0, costo_piedra_especialista=0, costo_comida_especialista=0;
     public String raza, especialista;
     abstract public void Iniciar();
-    abstract public void Atacar_Fortaleza();
 }
