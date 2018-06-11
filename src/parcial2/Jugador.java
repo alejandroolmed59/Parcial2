@@ -58,11 +58,15 @@ public class Jugador {
         Edificacion e = factory.getEdificacion(leer.nextInt());
         e.Iniciar();
         if (e.nombre == "Castillo" && centro_mando.numeroDeMejora < 3) {
-            System.out.println("El castillo solo se puede construir en la edad de los Castillos!");
+            System.out.println("El castillo solo se puede construir en la edad de los Castillos como minimo!");
             return;
         }
         if (e.nombre == "\u001B[33m" + "MARAVILLA" + "\u001B[0m" && centro_mando.numeroDeMejora < 4) {
             System.out.println("La MARAVILLA solo se puede construir en la edad imperial!");
+            return;
+        }
+        if(e.nombre=="Taller de maquinas de asedio" && centro_mando.numeroDeMejora<2){
+            System.out.println("El Taller de maquinas de asedio solo se puede contruir en la edad Fedudal como minimo! ");
             return;
         }
         if (centro_mando.getComida_jugador() >= e.costo_comida && centro_mando.getOro_jugador() >= e.costo_oro && centro_mando.getPiedra_jugador() >= e.costo_piedra) {

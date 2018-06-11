@@ -19,7 +19,7 @@ public class centro_Mando{
     public int numeroDeMejora=1;
     int vida=600;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
-    double oro_jugador=32000, piedra_jugador=50000, comida_jugador=60000;
+    double oro_jugador=300, piedra_jugador=500, comida_jugador=1000;
     public centro_Mando(double oro, double piedra, double comida, int vida) {
         this.oro_jugador+= oro;
         this.piedra_jugador+= piedra;
