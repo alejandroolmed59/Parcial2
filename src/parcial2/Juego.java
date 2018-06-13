@@ -36,8 +36,10 @@ public class Juego {
         factory = FactoryProducer.getFactory("Raza");
         Raza maya = factory.getRaza(1);
         Raza teu = factory.getRaza(2);
+        Raza japo = factory.getRaza(3);
         maya.Iniciar();
         teu.Iniciar();
+        japo.Iniciar();
         factory = FactoryProducer.getFactory("Edificacion");
         Edificacion c = factory.getEdificacion(1);
         Edificacion g = factory.getEdificacion(2);
@@ -96,8 +98,8 @@ public class Juego {
             }
             menu(listaPlayers.get(1), listaPlayers.get(0).listaEdificiosJugador, listaPlayers.get(0).centro_mando);
 
-            resetFlagdeAtaque(listaPlayers.get(0));
-            resetFlagdeAtaque(listaPlayers.get(1));
+            resetFlagdeDefensa(listaPlayers.get(0));
+            resetFlagdeDefensa(listaPlayers.get(1));
             fase++;
         }
     }
@@ -114,11 +116,12 @@ public class Juego {
         System.out.println("6. Ver milicia");
         System.out.println("7. Ver edificios");
         System.out.println("8. Ver estado de centro de mando");
-        System.out.println("9. Pasar turno y recolectar materiales");
+        System.out.println("9. Pasar turno y generar recursos");
         System.out.println("10. Defender edificio");
         System.out.println("11. Defender centro de mando");
         System.out.println("\u001B[35m" + "12. Atacar centro de mando" + "\u001B[0m");
         System.out.println("13. Ver vehiculos");
+        System.out.println("14. Recolectar recursos");
         System.out.println("");
     }
 
@@ -155,7 +158,7 @@ public class Juego {
                         System.out.println(J.centro_mando.toString());
                         break;
                     case 9:
-                        J.recolectar();
+                        J.generar();
                         break;
                     case 10:
                         J.defender();
@@ -168,6 +171,9 @@ public class Juego {
                         break;
                     case 13:
                         J.mostrarVehiculosJugador();
+                        break;
+                    case 14:
+                        J.recolectar();
                         break;
                 }
             } catch (InputMismatchException e) {
@@ -183,46 +189,64 @@ public class Juego {
         Collections.shuffle(listaPlayers);
     }
 
-    public void ataqueInicioTurno(Jugador j, ArrayList<Edificacion> listaEdificiosJugador, centro_Mando cm) {
-        int flagHechiza1 = 0;
-        int flagHechiza2 = 0;
-        for (Edificacion e : listaEdificiosJugador) {
+    public void ataqueInicioTurno(Jugador j, ArrayList<Edificacion> listaEdificiosJugador_enemigo, centro_Mando cm_enemigo) {
+        int flagHechiza=0;
+        for (Edificacion e : listaEdificiosJugador_enemigo) {
             if (e.atacantes.size() != 0) {
-                if (flagHechiza1 == 0) {
-                    System.out.println("Tus unidades " + j.nombre_jugador + " atacaran a las edificaciones enemigas ahora!");
-                    flagHechiza1 = 1;
-                }
                 for (Milicia m : e.atacantes) {
-                    e.vida -= m.getAtaque();
+                    if (m.getFlagAtaque() == 0) {
+                        flagHechiza=1;
+                        e.vida -= m.getAtaque();
+                    } else {
+                        m.setFlagAtaque(0);
+                    }
+
                 }
             }
             if (e.atacantes_Vehiculo.size() != 0) {
                 for (Vehiculo v : e.atacantes_Vehiculo) {
-                    e.vida -= v.ataque;
+                    if (v.getFlagAtaque() == 0) {
+                        flagHechiza=1;
+                        e.vida -= v.ataque;
+                    } else {
+                        v.setFlagAtaque(0);
+                    }
                 }
             }
-        }
-        for (Milicia m : cm.atacantes) {
-            if (flagHechiza2 == 0) {
-                System.out.println("Tus unidades " + j.nombre_jugador + " atacaran al centro de mando enemigo ahora!");
-                flagHechiza2 = 1;
+            if(flagHechiza==1){
+                System.out.println("Tus unidades atacaran ahora! "+j.nombre_jugador);
             }
-            cm.operar_Vida_jugador(-m.getAtaque());
         }
-        for(Vehiculo v: cm.atacantes_Vehiculo){
-            cm.operar_Vida_jugador(-v.ataque);
+        for (Milicia m : cm_enemigo.atacantes) {
+            if (m.getFlagAtaque() == 0) {
+                cm_enemigo.operar_Vida_jugador(-m.getAtaque());
+            } else {
+                m.setFlagAtaque(0);
+            }
+
         }
-        if (cm.getVida() <= 0) {
+        for (Vehiculo v : cm_enemigo.atacantes_Vehiculo) {
+            if (v.getFlagAtaque() == 0) {
+                cm_enemigo.operar_Vida_jugador(-v.ataque);
+            } else {
+                v.setFlagAtaque(0);
+            }
+        }
+        if (cm_enemigo.getVida() <= 0) {
             flag_FindeJuego = 1;
         }
     }
 
-public void resetFlagdeAtaque(Jugador j) {
+    public void resetFlagdeDefensa(Jugador j) {
+        j.centro_mando.setFlagRecolectar(1);
         for (Milicia m : j.listaMiliciaJugador) {
-            m.setFlagAtaque(0);
+            m.setFlagDefensa(0);
+            m.setFlagAtaqueV2(0);
         }
-        for (Vehiculo v: j.listaVehiculoJugador )
-            v.setFlagAtaque(0);        
+        for (Vehiculo v : j.listaVehiculoJugador) {
+            v.setFlagDefensa(0);
+            v.setFlagAtaqueV2(0);
+        }
     }
 
     public void construir(Jugador j) {

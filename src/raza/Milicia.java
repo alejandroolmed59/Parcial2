@@ -11,7 +11,15 @@ package raza;
  */
 public class Milicia {
     String tipo;
-    int ataque,  vida, id, flagAtaque=1;
+    int ataque,  vida, id, flagDefensa=1, flagAtaque=1, flagAtaqueV2=1;
+
+    public int getFlagDefensa() {
+        return flagDefensa;
+    }
+
+    public void setFlagDefensa(int flagDefensa) {
+        this.flagDefensa = flagDefensa;
+    }
 
     public int getFlagAtaque() {
         return flagAtaque;
@@ -20,6 +28,7 @@ public class Milicia {
     public void setFlagAtaque(int flagAtaque) {
         this.flagAtaque = flagAtaque;
     }
+    
     
     public Milicia(String tipo, int ataque, int vida){
         this.tipo=tipo;
@@ -45,6 +54,15 @@ public class Milicia {
     public int getId() {
         return id;
     }
+
+    public int getFlagAtaqueV2() {
+        return flagAtaqueV2;
+    }
+
+    public void setFlagAtaqueV2(int flagAtaqueV2) {
+        this.flagAtaqueV2 = flagAtaqueV2;
+    }
+    
 
     @Override
     public String toString() {

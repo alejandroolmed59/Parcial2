@@ -19,6 +19,8 @@ public class FactoryRaza implements AbstractFactory {
                 return new Maya();
             case 2:
                 return new Teuton();  
+            case 3:
+                return new Japones();
     }
         return null;
     }

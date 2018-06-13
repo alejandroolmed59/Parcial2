@@ -18,15 +18,21 @@ public abstract class Edificacion {
     public ArrayList<Milicia> atacantes= new ArrayList();
     public ArrayList<Vehiculo> atacantes_Vehiculo= new ArrayList();
     public int vida=0, cooldown=0;
+    public boolean isRecolectable=false;
     public String nombre="", descripcion_extra="";
-    public double costo_oro=0, costo_piedra=0, costo_comida=0;
+    public double costo_oro=0, costo_piedra=0, costo_comida=0,capacidad_recursos_max, recurso;
     abstract public void Iniciar();
     abstract public centro_Mando recolectar(centro_Mando cm);
+    abstract public centro_Mando generar(centro_Mando cm);
     abstract public Milicia crearSoldado(Raza raza);
+    abstract public void almacenar();
 
     @Override
     public String toString() {
-        return nombre + " ,vida:" + vida + " Milicia atacantes=" + atacantes.toString()+" Vehiculos atacantes= "+atacantes_Vehiculo.toString();
+        if(isRecolectable==true){
+            return nombre + " ,vida:" + vida +" recursos dentro: "+recurso +" Milicia atacantes=" + atacantes.toString()+" Vehiculos atacantes= "+atacantes_Vehiculo.toString();
+        }
+        return nombre + " ,vida:" + vida +" Milicia atacantes=" + atacantes.toString()+" Vehiculos atacantes= "+atacantes_Vehiculo.toString();   
     }
-    
 }
+        

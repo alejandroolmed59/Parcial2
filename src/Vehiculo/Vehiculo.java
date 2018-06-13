@@ -11,7 +11,15 @@ package Vehiculo;
  */
 public abstract class Vehiculo {
 
-    public int ataque = 0, vida = 0, cooldown = 0, flagAtaque=1, id = Vehiculo.this.hashCode();
+    public int ataque = 0, vida = 0, cooldown = 0, flagDefensa=1, flagAtaque=1, flagAtaqueV2=1, id = Vehiculo.this.hashCode();
+
+    public int getFlagAtaqueV2() {
+        return flagAtaqueV2;
+    }
+
+    public void setFlagAtaqueV2(int flagAtaqueV2) {
+        this.flagAtaqueV2 = flagAtaqueV2;
+    }
     public String nombre = "", descripcion_extra = "";
     public double costo_oro = 0, costo_piedra = 0, costo_comida = 0;
 
@@ -30,15 +38,23 @@ public abstract class Vehiculo {
         return vida;
     }
 
-    public int getFlagAtaque() {
-        return flagAtaque;
+    public int getFlagDefensa() {
+        return flagDefensa;
     }
     public void operar_Vida(int vida){
         this.vida+= vida;
     }
 
+    public int getFlagAtaque() {
+        return flagAtaque;
+    }
+
     public void setFlagAtaque(int flagAtaque) {
         this.flagAtaque = flagAtaque;
+    }
+
+    public void setFlagDefensa(int flagDefensa) {
+        this.flagDefensa = flagDefensa;
     }
 
 }

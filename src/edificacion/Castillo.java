@@ -20,12 +20,12 @@ public class Castillo extends Edificacion {
         this.costo_oro=1500;
         this.costo_piedra=2500;
         this.nombre="Castillo";
-        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad de los castillos"+"\u001B[0m";
+        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad de los castillos, genera recursos"+"\u001B[0m"+" genera recursos:comida, piedra, oro";
         this.cooldown=4;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }
-    public centro_Mando recolectar(centro_Mando cm){
+    public centro_Mando generar(centro_Mando cm){
         if(cm.comida_jugador+10000<cm.max_comida){
             cm.operar_Comida_jugador(10000);
         }else{
@@ -43,10 +43,16 @@ public class Castillo extends Edificacion {
         }  
         return cm;
     }
+    @Override
+    public centro_Mando recolectar(centro_Mando cm){
+        return cm;
+    }
     
     @Override
     public Milicia crearSoldado(Raza raza){
         return null;
     }
-    
+    @Override
+    public void almacenar(){
+    }
 }

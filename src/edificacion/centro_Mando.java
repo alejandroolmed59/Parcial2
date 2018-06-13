@@ -17,9 +17,9 @@ public class centro_Mando{
     public ArrayList<Milicia> atacantes= new ArrayList();
     public ArrayList<Vehiculo> atacantes_Vehiculo= new ArrayList();
     public int numeroDeMejora=1;
-    int vida=600;
+    int vida=600,  flagRecolectar=1;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
-    double oro_jugador=300, piedra_jugador=500, comida_jugador=1000;
+    double oro_jugador=1000, piedra_jugador=800, comida_jugador=1000;
     public centro_Mando(double oro, double piedra, double comida, int vida) {
         this.oro_jugador+= oro;
         this.piedra_jugador+= piedra;
@@ -97,6 +97,15 @@ public class centro_Mando{
     public int getVida() {
         return vida;
     }
+
+    public int getFlagRecolectar() {
+        return flagRecolectar;
+    }
+
+    public void setFlagRecolectar(int flagRecolectar) {
+        this.flagRecolectar = flagRecolectar;
+    }
+    
 
     public double getOro_jugador() {
         return oro_jugador;

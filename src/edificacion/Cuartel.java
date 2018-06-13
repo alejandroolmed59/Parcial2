@@ -25,7 +25,7 @@ public class Cuartel extends Edificacion{
         lista.anniadir(this);
     }
     @Override
-    public centro_Mando recolectar(centro_Mando cm){
+    public centro_Mando generar(centro_Mando cm){
         return cm;
     }
     @Override
@@ -39,5 +39,12 @@ public class Cuartel extends Edificacion{
                 return new Milicia(raza.especialista,raza.ataque_especialista, raza.vida_especialista);
         }
         return null;
+    }
+    @Override
+    public centro_Mando recolectar(centro_Mando cm){
+        return cm;
+    }
+        @Override
+    public void almacenar(){
     }
 }

@@ -41,10 +41,20 @@ public class Jugador {
         Scanner leer = new Scanner(System.in);
         System.out.println("Digite su nombre");
         nombre_jugador = leer.nextLine();
-        System.out.println("-------Eliga una raza---------\n");
-        listaRazas lista = listaRazas.getInstance();
-        lista.mostrar();
-        civilizacion = factory.getRaza(leer.nextInt());
+        int raza;
+        while(true){
+            try{
+            System.out.println("-------Eliga una raza---------\n");
+            listaRazas lista = listaRazas.getInstance();
+            lista.mostrar();
+            raza= leer.nextInt();
+            civilizacion = factory.getRaza(raza);
+            break;
+            }catch(Exception e){
+                System.err.println("Ingrese un dato valido");
+                leer.nextLine();
+            }
+        }
         civilizacion.Iniciar();
         centro_mando = new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
     }
@@ -75,7 +85,7 @@ public class Jugador {
             centro_mando.operar_Piedra_jugador(-e.costo_piedra);
             int espera = (e.cooldown + fase);
             //listaEdificiosJugador.add(e);
-            if (espera == 0) {
+            if (e.cooldown == 0) {
                 listaEdificiosJugador.add(e);
             } else {
                 mapadeEspera.put(e, espera);
@@ -86,10 +96,31 @@ public class Jugador {
         }
     }
 
-    public void recolectar() {
+    public void generar() {
         for (Edificacion e : listaEdificiosJugador) {
-            centro_mando = e.recolectar(centro_mando);
+            centro_mando = e.generar(centro_mando);
+            e.almacenar();
         }
+    }
+    public void recolectar(){
+        if(centro_mando.getFlagRecolectar()==0){
+            System.err.println("Solo se pueden recolectar recursos 1 vez por turno!!");
+            return;
+        }
+        ArrayList<Edificacion> temp = new ArrayList<>();
+        Scanner leer = new Scanner(System.in);
+        int opcion=0;
+        int i=1;
+        for(Edificacion e: listaEdificiosJugador){
+            if(e.isRecolectable==true){
+                System.out.println(i+" "+e.nombre+" recursos almacenados: "+e.recurso+" "+e.descripcion_extra);
+                temp.add(e);
+                i++;
+            }
+        }
+        opcion= leer.nextInt()-1;
+        centro_mando= temp.get(opcion).recolectar(centro_mando);
+        
     }
 
     public void crear(String tipo) {
@@ -172,9 +203,13 @@ public class Jugador {
                 mostrarMiliciaJugador();
                 if (listaMiliciaJugador.size() != 0) {
                     opcion2 = leer2.nextInt() - 1;
-                    edificios_enemigos.get(opcion).atacantes.add(listaMiliciaJugador.get(opcion2));
-                    listaMiliciaJugador.remove(opcion2);
-                    System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " al principio de tu siguiente turno" + " ,vida=" + edificios_enemigos.get(opcion).vida);
+                    if(listaMiliciaJugador.get(opcion2).getFlagAtaqueV2()==0){
+                        edificios_enemigos.get(opcion).atacantes.add(listaMiliciaJugador.get(opcion2));
+                        listaMiliciaJugador.remove(opcion2);
+                        System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " en dos turnos " + " ,vida=" + edificios_enemigos.get(opcion).vida);
+                    }else{
+                        System.out.println("No puedes mandar a atacar a una unidad que entrenaste este turno!");
+                    }
                     return;
                 }
                 System.out.println("No tienes milicia preparada para atacar!");
@@ -184,11 +219,16 @@ public class Jugador {
                 mostrarVehiculosJugador();
                 if (listaVehiculoJugador.size() != 0) {
                     opcion2 = leer2.nextInt() - 1;
-                    edificios_enemigos.get(opcion).atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion2));
-                    listaVehiculoJugador.remove(opcion2);
-                    System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " al principio de tu siguiente turno" + " ,vida=" + edificios_enemigos.get(opcion).vida);
+                    if(listaVehiculoJugador.get(opcion2).getFlagAtaqueV2()==0){
+                        edificios_enemigos.get(opcion).atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion2));
+                        listaVehiculoJugador.remove(opcion2);
+                        System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " en dos turnos " + " ,vida=" + edificios_enemigos.get(opcion).vida);
+                    }else{
+                        System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
+                    }
                     return;
                 }
+                System.out.println("No tienes vehiculos construidos para atacar!");
                 return;
         }
     }
@@ -206,9 +246,13 @@ public class Jugador {
                     mostrarMiliciaJugador();
                     if (listaMiliciaJugador.size() != 0) {
                         opcion = leer.nextInt() - 1;
-                        cm_enemigo.atacantes.add(listaMiliciaJugador.get(opcion));
-                        listaMiliciaJugador.remove(opcion);
-                        System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
+                        if(listaMiliciaJugador.get(opcion).getFlagAtaqueV2()==0){
+                            cm_enemigo.atacantes.add(listaMiliciaJugador.get(opcion));
+                            listaMiliciaJugador.remove(opcion);
+                            System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
+                        }else{
+                            System.out.println("No puedes mandar a atacar a una unidad que entrenaste este turno!");
+                        }
                         return;
                     }
                     System.out.println("No tienes milicia preparada para atacar!");
@@ -218,9 +262,13 @@ public class Jugador {
                     mostrarVehiculosJugador();
                     if (listaVehiculoJugador.size() != 0) {
                         opcion = leer.nextInt() - 1;
-                        cm_enemigo.atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion));
-                        listaVehiculoJugador.remove(opcion);
-                        System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
+                        if(listaVehiculoJugador.get(opcion).getFlagAtaqueV2()==0){
+                            cm_enemigo.atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion));
+                            listaVehiculoJugador.remove(opcion);
+                            System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
+                        }else{
+                            System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
+                        }
                         return;
                     }
             }
@@ -272,11 +320,11 @@ public class Jugador {
                 System.out.println("¿A que unidad mandara?");
                 mostrarMiliciaJugador();
                 opcion1 = leer2.nextInt() - 1;
-                if (listaMiliciaJugador.get(opcion1).getFlagAtaque() == 0) {
+                if (listaMiliciaJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         e.atacantes.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
                         listaMiliciaJugador.get(opcion1).operar_Vida(-e.atacantes.get(opcion).getAtaque());
-                        listaMiliciaJugador.get(opcion1).setFlagAtaque(1);
+                        listaMiliciaJugador.get(opcion1).setFlagDefensa(1);
                         if (e.atacantes.get(opcion).getVida() <= 0) {
                             System.out.println("Has eliminado a la unidad enemiga");
                             e.atacantes.remove(opcion);
@@ -288,7 +336,7 @@ public class Jugador {
                     } else if (opciontipoAtacantes == 2) {
                         e.atacantes_Vehiculo.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
                         listaMiliciaJugador.get(opcion1).operar_Vida(-e.atacantes_Vehiculo.get(opcion).ataque);
-                        listaMiliciaJugador.get(opcion1).setFlagAtaque(1);
+                        listaMiliciaJugador.get(opcion1).setFlagDefensa(1);
                         if (e.atacantes_Vehiculo.get(opcion).getVida() <= 0) {
                             System.out.println("Has destruido al vehiculo enemigo");
                             e.atacantes_Vehiculo.remove(opcion);
@@ -307,11 +355,11 @@ public class Jugador {
                 System.out.println("¿A que vehicula mandara");
                 mostrarVehiculosJugador();
                 opcion1 = leer2.nextInt() - 1;
-                if (listaVehiculoJugador.get(opcion1).getFlagAtaque() == 0) {
+                if (listaVehiculoJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         e.atacantes.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
                         listaVehiculoJugador.get(opcion1).operar_Vida(-e.atacantes.get(opcion).getAtaque());
-                        listaVehiculoJugador.get(opcion1).setFlagAtaque(1);
+                        listaVehiculoJugador.get(opcion1).setFlagDefensa(1);
                         if (e.atacantes.get(opcion).getVida() <= 0) {
                             System.out.println("Has eliminado a la unidad enemiga");
                             e.atacantes.remove(opcion);
@@ -323,7 +371,7 @@ public class Jugador {
                     } else if (opciontipoAtacantes == 2) {
                         e.atacantes_Vehiculo.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
                         listaVehiculoJugador.get(opcion1).operar_Vida(-e.atacantes_Vehiculo.get(opcion).getAtaque());
-                        listaVehiculoJugador.get(opcion1).setFlagAtaque(1);
+                        listaVehiculoJugador.get(opcion1).setFlagDefensa(1);
                         if (e.atacantes_Vehiculo.get(opcion).getVida() <= 0) {
                             System.out.println("Has destruido al vehiculo enemigo");
                             e.atacantes_Vehiculo.remove(opcion);
@@ -378,11 +426,11 @@ public class Jugador {
                 System.out.println("¿A que unidad mandara?");
                 mostrarMiliciaJugador();
                 opcion1 = leer2.nextInt() - 1;
-                if (listaMiliciaJugador.get(opcion1).getFlagAtaque() == 0) {
+                if (listaMiliciaJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         centro_mando.atacantes.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
                         listaMiliciaJugador.get(opcion1).operar_Vida(-centro_mando.atacantes.get(opcion).getAtaque());
-                        listaMiliciaJugador.get(opcion1).setFlagAtaque(1);
+                        listaMiliciaJugador.get(opcion1).setFlagDefensa(1);
                         if (centro_mando.atacantes.get(opcion).getVida() <= 0) {
                             System.out.println("Has eliminado a la unidad enemiga");
                             centro_mando.atacantes.remove(opcion);
@@ -394,7 +442,7 @@ public class Jugador {
                     } else if (opciontipoAtacantes == 2) {
                         centro_mando.atacantes_Vehiculo.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
                         listaMiliciaJugador.get(opcion1).operar_Vida(-centro_mando.atacantes_Vehiculo.get(opcion).ataque);
-                        listaMiliciaJugador.get(opcion1).setFlagAtaque(1);
+                        listaMiliciaJugador.get(opcion1).setFlagDefensa(1);
                         if (centro_mando.atacantes_Vehiculo.get(opcion).getVida() <= 0) {
                             System.out.println("Has destruido al vehiculo enemigo");
                             centro_mando.atacantes_Vehiculo.remove(opcion);
@@ -413,11 +461,11 @@ public class Jugador {
                 System.out.println("¿A que vehicula mandara");
                 mostrarVehiculosJugador();
                 opcion1 = leer2.nextInt() - 1;
-                if (listaVehiculoJugador.get(opcion1).getFlagAtaque() == 0) {
+                if (listaVehiculoJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         centro_mando.atacantes.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
                         listaVehiculoJugador.get(opcion1).operar_Vida(-centro_mando.atacantes.get(opcion).getAtaque());
-                        listaVehiculoJugador.get(opcion1).setFlagAtaque(1);
+                        listaVehiculoJugador.get(opcion1).setFlagDefensa(1);
                         if (centro_mando.atacantes.get(opcion).getVida() <= 0) {
                             System.out.println("Has eliminado a la unidad enemiga");
                             centro_mando.atacantes.remove(opcion);
@@ -429,7 +477,7 @@ public class Jugador {
                     } else if (opciontipoAtacantes == 2) {
                         centro_mando.atacantes_Vehiculo.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
                         listaVehiculoJugador.get(opcion1).operar_Vida(-centro_mando.atacantes_Vehiculo.get(opcion).getAtaque());
-                        listaVehiculoJugador.get(opcion1).setFlagAtaque(1);
+                        listaVehiculoJugador.get(opcion1).setFlagDefensa(1);
                         if (centro_mando.atacantes_Vehiculo.get(opcion).getVida() <= 0) {
                             System.out.println("Has destruido al vehiculo enemigo");
                             centro_mando.atacantes_Vehiculo.remove(opcion);

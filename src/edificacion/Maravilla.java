@@ -48,6 +48,13 @@ public class Maravilla extends Edificacion {
     public Milicia crearSoldado(Raza raza){
         return null;
     }
+    @Override
+    public centro_Mando generar(centro_Mando cm){
+        return cm;
+    }
+        @Override
+    public void almacenar(){
+    }
     
 }
 
