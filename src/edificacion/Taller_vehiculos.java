@@ -18,8 +18,9 @@ public class Taller_vehiculos extends Edificacion{
         this.vida=250;
         this.nombre="Taller de maquinas de asedio";
         this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad feudal"+"\u001B[0m";
-        this.costo_comida=600;
-        this.costo_piedra=300;
+        this.costo_comida=900;
+        this.costo_piedra=400;
+        this.costo_oro=200;
         this.cooldown=2;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);

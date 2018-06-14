@@ -13,16 +13,17 @@ public class Teuton extends Raza {
     @Override
     public void Iniciar() {
         this.oroBonus=1000;
-        this.comidaBonus=1000;
-        this.ataque=ataque+20;
-        this.vida=vida;
+        this.piedraBonus=1000;
+        this.ataque=ataque-10;
+        this.vida=vida+50;
         this.raza="Teuton";
         this.especialista="Caballero de la orden teutonica";
-        this.ataque_especialista=200;
-        this.vida_especialista=300;
-        this.costo_oro_especialista=300;
+        this.bad_luck=0;
+        this.ataque_especialista=180;
+        this.vida_especialista=350;
+        this.costo_oro_especialista=400;
         this.costo_comida_especialista=2000;
-        this.costo_piedra_especialista=500;
+        this.costo_piedra_especialista=800;
         listaRazas lista= listaRazas.getInstance();
         lista.anniadir(this);
     }

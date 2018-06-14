@@ -31,15 +31,20 @@ public class Cuartel extends Edificacion{
     @Override
     public Milicia crearSoldado(Raza raza){
         System.out.println("Ingrese el tipo de milicia(Soldado o Especialista)");
+        System.out.println("Costo de Soldado.  Comida: "+raza.costo_comida_soldado+" Oro: "+raza.costo_oro_soldado);
+        System.out.println("Costo de "+raza.especialista+".  Comida: "+raza.costo_comida_especialista+" Oro: "+raza.costo_oro_especialista+" Piedra: "+raza.costo_piedra_especialista);
         Scanner leer = new Scanner(System.in);
-        switch(leer.next()){
-            case "Soldado":
-                return new Milicia("Soldado",raza.ataque, raza.vida);
-            case "Especialista":
-                return new Milicia(raza.especialista,raza.ataque_especialista, raza.vida_especialista);
+        while(true){
+            switch(leer.next()){
+                case "Soldado":
+                    return new Milicia("Soldado",raza.ataque, raza.vida);
+                case "Especialista":
+                    return new Milicia(raza.especialista,raza.ataque_especialista, raza.vida_especialista);
+            }
+            System.err.println("Debe ingresar Soldado o Especialista");
         }
-        return null;
     }
+    
     @Override
     public centro_Mando recolectar(centro_Mando cm){
         return cm;

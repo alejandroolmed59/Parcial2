@@ -15,28 +15,28 @@ import raza.Raza;
 public class Castillo extends Edificacion {
     @Override
     public void Iniciar(){
-        this.vida=1200;
-        this.costo_comida=5000;
+        this.vida=1000;
+        this.costo_comida=7000;
         this.costo_oro=1500;
         this.costo_piedra=2500;
         this.nombre="Castillo";
-        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad de los castillos, genera recursos"+"\u001B[0m"+" genera recursos:comida, piedra, oro";
+        this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad de los castillos, "+"\u001B[0m"+"\u001B[34m"+" genera recursos:comida, piedra, oro"+ "\u001B[0m";
         this.cooldown=4;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }
     public centro_Mando generar(centro_Mando cm){
-        if(cm.comida_jugador+10000<cm.max_comida){
-            cm.operar_Comida_jugador(10000);
+        if(cm.comida_jugador+5000<cm.max_comida){
+            cm.operar_Comida_jugador(5000);
         }else{
             System.out.println("Se a alcanzado el maximo de comida!!");
         }
-        if(cm.oro_jugador+3000<cm.max_oro){
+        if(cm.oro_jugador+2000<cm.max_oro){
             cm.operar_Oro_jugador(3000);
         }else{
             System.out.println("Se a alcanzado el maximo de cro!!");
         }
-        if(cm.piedra_jugador+5000<cm.max_piedra){
+        if(cm.piedra_jugador+3000<cm.max_piedra){
             cm.operar_Piedra_jugador(10000);
         }else{
             System.out.println("Se a alcanzado el maximo de piedra!!");

@@ -15,14 +15,14 @@ import raza.Raza;
 public class Mina_oro extends Edificacion{
     @Override
     public void Iniciar(){
-        this.vida=70;
+        this.vida=100;
         this.nombre="Mina de oro";
         this.descripcion_extra="\u001B[34m"+"se deben recolectar recursos: oro"+"\u001B[0m";
         this.isRecolectable= true;
         this.capacidad_recursos_max=1000;
         this.recurso=0;
-        this.costo_oro=150;
-        this.costo_piedra=50;
+        this.costo_comida=500;
+        this.costo_piedra=350;
         this.cooldown=2;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);

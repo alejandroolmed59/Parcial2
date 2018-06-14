@@ -19,8 +19,8 @@ public class Piedreria extends Edificacion{
         this.nombre="Piedreria";
         this.descripcion_extra="\u001B[34m"+ "se deben recolectar recursos: piedra"+"\u001B[0m";
         this.isRecolectable=true;
-        this.costo_piedra=100;
-        this.costo_oro=100;
+        this.costo_oro=200;
+        this.costo_comida=500;
         this.capacidad_recursos_max=1600;
         this.recurso=0;
         this.cooldown=1;

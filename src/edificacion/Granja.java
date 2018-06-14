@@ -14,11 +14,11 @@ public class Granja extends Edificacion {
     @Override
     public void Iniciar(){
         this.vida=70;
-        this.costo_comida=500;
+        this.costo_piedra=400;
         this.costo_oro=200;
         this.nombre="Granja";
         this.descripcion_extra="\u001B[34m"+"genera recursos: comida"+"\u001B[0m";
-        this.cooldown=0;
+        this.cooldown=1;
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.anniadir(this);
     }

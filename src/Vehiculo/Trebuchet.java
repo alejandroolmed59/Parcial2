@@ -12,7 +12,7 @@ package Vehiculo;
 public class Trebuchet extends Vehiculo {
     @Override
     public void Iniciar(){
-        this.ataque=300;
+        this.ataque=350;
         this.vida=300;
         this.costo_comida=1000;
         this.costo_oro=500;

@@ -19,6 +19,7 @@ import java.util.Map;
 import raza.Raza;
 import raza.Milicia;
 import raza.listaRazas;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *
@@ -42,15 +43,20 @@ public class Jugador {
         System.out.println("Digite su nombre");
         nombre_jugador = leer.nextLine();
         int raza;
-        while(true){
-            try{
-            System.out.println("-------Eliga una raza---------\n");
-            listaRazas lista = listaRazas.getInstance();
-            lista.mostrar();
-            raza= leer.nextInt();
-            civilizacion = factory.getRaza(raza);
-            break;
-            }catch(Exception e){
+        while (true) {
+            try {
+                System.out.println("Eliga una raza");
+                listaRazas lista = listaRazas.getInstance();
+                lista.mostrar();
+                raza = leer.nextInt();
+                if (lista.getArray().size() >= raza) {
+                    civilizacion = factory.getRaza(raza);
+                    break;
+                } else {
+                    System.err.println("Ingrese una opcion valida");
+                    leer.nextLine();
+                }
+            } catch (Exception e) {
                 System.err.println("Ingrese un dato valido");
                 leer.nextLine();
             }
@@ -64,8 +70,19 @@ public class Jugador {
         lista.mostrar();
         Scanner leer = new Scanner(System.in);
         AbstractFactory factory;
+        int opcion;
         factory = FactoryProducer.getFactory("Edificacion");
-        Edificacion e = factory.getEdificacion(leer.nextInt());
+        try {
+            opcion = leer.nextInt();
+        } catch (Exception err) {
+            System.err.println("Ingrese un dato valido");
+            return;
+        }
+        if (lista.getArray().size() < opcion) {
+            System.err.println("Ingrese una opcion valida");
+            return;
+        }
+        Edificacion e = factory.getEdificacion(opcion);
         e.Iniciar();
         if (e.nombre == "Castillo" && centro_mando.numeroDeMejora < 3) {
             System.out.println("El castillo solo se puede construir en la edad de los Castillos como minimo!");
@@ -75,7 +92,7 @@ public class Jugador {
             System.out.println("La MARAVILLA solo se puede construir en la edad imperial!");
             return;
         }
-        if(e.nombre=="Taller de maquinas de asedio" && centro_mando.numeroDeMejora<2){
+        if (e.nombre == "Taller de maquinas de asedio" && centro_mando.numeroDeMejora < 2) {
             System.out.println("El Taller de maquinas de asedio solo se puede contruir en la edad Fedudal como minimo! ");
             return;
         }
@@ -83,13 +100,15 @@ public class Jugador {
             centro_mando.operar_Comida_jugador(-e.costo_comida);
             centro_mando.operar_Oro_jugador(-e.costo_oro);
             centro_mando.operar_Piedra_jugador(-e.costo_piedra);
-            int espera = (e.cooldown + fase);
+            int tiempoNeto=e.cooldown-civilizacion.cooldownEdificacionesBonus;
+            int espera = (tiempoNeto + fase);
             //listaEdificiosJugador.add(e);
-            if (e.cooldown == 0) {
+            if (tiempoNeto  == 0) {
                 listaEdificiosJugador.add(e);
+                System.out.println("Se ha terminado de construir " +e.nombre+ " , " +nombre_jugador);
             } else {
                 mapadeEspera.put(e, espera);
-                System.out.println("Se empezo a construir la edificacion, estara lista dentro de " + e.cooldown + " fase/s, es decir la fase " + (espera));
+                System.out.println("Se empezo a construir la edificacion, estara lista dentro de " + tiempoNeto + " fase/s, es decir la fase " + (espera));
             }
         } else {
             System.out.println("Recursos insuficientes");
@@ -102,28 +121,39 @@ public class Jugador {
             e.almacenar();
         }
     }
-    public void recolectar(){
-        if(centro_mando.getFlagRecolectar()==0){
+
+    public void recolectar() {
+        if (centro_mando.getFlagRecolectar() == 0) {
             System.err.println("Solo se pueden recolectar recursos 1 vez por turno!!");
             return;
         }
         ArrayList<Edificacion> temp = new ArrayList<>();
         Scanner leer = new Scanner(System.in);
-        int opcion=0;
-        int i=1;
-        for(Edificacion e: listaEdificiosJugador){
-            if(e.isRecolectable==true){
-                System.out.println(i+" "+e.nombre+" recursos almacenados: "+e.recurso+" "+e.descripcion_extra);
+        int opcion = 0;
+        int i = 1;
+        for (Edificacion e : listaEdificiosJugador) {
+            if (e.isRecolectable == true) {
+                System.out.println(i + " " + e.nombre + " recursos almacenados: " + e.recurso + " " + e.descripcion_extra);
                 temp.add(e);
                 i++;
             }
         }
-        opcion= leer.nextInt()-1;
-        centro_mando= temp.get(opcion).recolectar(centro_mando);
-        
+        try {
+            opcion = leer.nextInt() - 1;
+        } catch (Exception e) {
+            System.err.println("Ingrese un dato valido");
+            return;
+        }
+        if (temp.size() - 1 < opcion) {
+            System.err.println("Ingrese una opcion valida");
+            return;
+        }
+        centro_mando = temp.get(opcion).recolectar(centro_mando);
+        System.out.println("Se transaladaron los recursos al centro de mando");
+
     }
 
-    public void crear(String tipo) {
+    public void crear(String tipo, int fase) {
         switch (tipo) {
             case "Milicia":
                 for (Edificacion e : listaEdificiosJugador) {
@@ -159,14 +189,26 @@ public class Jugador {
                         lista.mostrar();
                         Scanner leer = new Scanner(System.in);
                         AbstractFactory factory = FactoryProducer.getFactory("Vehiculo");
-                        Vehiculo v = factory.getVehiculo(leer.nextInt());
+                        int opcion = leer.nextInt();
+                        if (lista.getArray().size() < opcion) {
+                            System.err.println("Ingrese una opcion valida");
+                            return;
+                        }
+                        Vehiculo v = factory.getVehiculo(opcion);
                         v.Iniciar();
+                        int espera = (v.cooldown + fase);
                         if (centro_mando.getComida_jugador() >= v.costo_comida && centro_mando.getOro_jugador() >= v.costo_oro && centro_mando.getPiedra_jugador() >= v.costo_piedra) {
-                            listaVehiculoJugador.add(v);
                             centro_mando.operar_Comida_jugador(-v.costo_comida);
                             centro_mando.operar_Oro_jugador(-v.costo_oro);
                             centro_mando.operar_Piedra_jugador(-v.costo_piedra);
-                            return;
+                            if (v.cooldown == 0) {
+                                listaVehiculoJugador.add(v);
+                                return;
+                            } else {
+                                mapadeEspera_Vehiculo.put(v, espera);
+                                System.out.println("Se empezo a construir el vehiculo, estara lista dentro de " + v.cooldown + " fase/s, es decir la fase " + (espera));
+                                return;
+                            }
                         }
                         System.out.println("No tienes suficientes recursos para crear esta unidad");
                         return;
@@ -194,20 +236,48 @@ public class Jugador {
             i++;
         }
         System.out.println("Cual atacara?");
-        opcion = leer.nextInt() - 1;
+        try {
+            opcion = leer.nextInt() - 1;
+        } catch (Exception e) {
+            System.err.println("Ingrese un dato valido");
+            return;
+        }
+        if (edificios_enemigos.size() - 1 < opcion) {
+            System.err.println("Ingrese una opcion valida");
+        }
+
         System.out.println("Que unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
-        opciontipo = leer.nextInt();
+        try {
+            opciontipo = leer.nextInt();
+        } catch (Exception e) {
+            System.err.println("Ingrese un tipo de dato valido");
+        }
         switch (opciontipo) {
             case 1:
                 System.out.println("A quienes mandaras al ataque?");
                 mostrarMiliciaJugador();
                 if (listaMiliciaJugador.size() != 0) {
-                    opcion2 = leer2.nextInt() - 1;
-                    if(listaMiliciaJugador.get(opcion2).getFlagAtaqueV2()==0){
+                    try {
+                        opcion2 = leer2.nextInt() - 1;
+                    } catch (Exception e) {
+                        System.err.println("Ingrese un tipo de dato valido");
+                    }
+                    if (listaMiliciaJugador.size() - 1 < opcion2) {
+                        System.err.println("Ingrese una opcion valida");
+                        return;
+                    }
+                    if (listaMiliciaJugador.get(opcion2).getFlagAtaqueV2() == 0) {
+                        int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
+                        System.out.println(randomNum);
+                        if (randomNum <= civilizacion.bad_luck) {
+                            System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu milicia ha sido deborada por lobos salvajes en el camino :(" + "\u001B[0m");
+                            listaMiliciaJugador.remove(opcion2);
+                            return;
+                        }
                         edificios_enemigos.get(opcion).atacantes.add(listaMiliciaJugador.get(opcion2));
                         listaMiliciaJugador.remove(opcion2);
                         System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " en dos turnos " + " ,vida=" + edificios_enemigos.get(opcion).vida);
-                    }else{
+                    } else {
                         System.out.println("No puedes mandar a atacar a una unidad que entrenaste este turno!");
                     }
                     return;
@@ -218,18 +288,35 @@ public class Jugador {
                 System.out.println("Cual vehiculo mandaras al ataque?");
                 mostrarVehiculosJugador();
                 if (listaVehiculoJugador.size() != 0) {
-                    opcion2 = leer2.nextInt() - 1;
-                    if(listaVehiculoJugador.get(opcion2).getFlagAtaqueV2()==0){
+                    try {
+                        opcion2 = leer2.nextInt() - 1;
+                    } catch (Exception e) {
+                        System.err.println("Ingrese un tipo de dato valido");
+                    }
+                    if (listaVehiculoJugador.size() - 1 < opcion2) {
+                        System.err.println("Ingrese una opcion valida");
+                        return;
+                    }
+                    if (listaVehiculoJugador.get(opcion2).getFlagAtaqueV2() == 0) {
+                        int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
+                        System.out.println(randomNum);
+                        if (randomNum <= civilizacion.bad_luck) {
+                            System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu vehiculo ha explotado en el camino :(" + "\u001B[0m");
+                            listaVehiculoJugador.remove(opcion2);
+                            return;
+                        }
                         edificios_enemigos.get(opcion).atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion2));
                         listaVehiculoJugador.remove(opcion2);
                         System.out.println("Atacaras a " + edificios_enemigos.get(opcion).nombre + " en dos turnos " + " ,vida=" + edificios_enemigos.get(opcion).vida);
-                    }else{
+                    } else {
                         System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
                     }
                     return;
                 }
                 System.out.println("No tienes vehiculos construidos para atacar!");
                 return;
+            default:
+                System.out.println("Ingrese un tipo");
         }
     }
 
@@ -239,18 +326,31 @@ public class Jugador {
             int opciontipo = 0;
             Scanner leer = new Scanner(System.in);
             System.out.println("Que unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
-            opciontipo = leer.nextInt();
+            try {
+                opciontipo = leer.nextInt();
+            } catch (Exception e) {
+                System.out.println("Ingrese un tipo de dato valido");
+            }
             switch (opciontipo) {
                 case 1:
                     System.out.println("A quienes mandaras al ataque?");
                     mostrarMiliciaJugador();
                     if (listaMiliciaJugador.size() != 0) {
-                        opcion = leer.nextInt() - 1;
-                        if(listaMiliciaJugador.get(opcion).getFlagAtaqueV2()==0){
+                        try {
+                            opcion = leer.nextInt() - 1;
+                        } catch (Exception e) {
+                            System.err.println("Ingrese un tipo de dato valido");
+                            return;
+                        }
+                        if (listaMiliciaJugador.size() - 1 < opcion) {
+                            System.err.println("Ingrese una opcion valida");
+                            return;
+                        }
+                        if (listaMiliciaJugador.get(opcion).getFlagAtaqueV2() == 0) {
                             cm_enemigo.atacantes.add(listaMiliciaJugador.get(opcion));
                             listaMiliciaJugador.remove(opcion);
                             System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
-                        }else{
+                        } else {
                             System.out.println("No puedes mandar a atacar a una unidad que entrenaste este turno!");
                         }
                         return;
@@ -261,12 +361,20 @@ public class Jugador {
                     System.out.println("Cual vehiculo mandaras al ataque?");
                     mostrarVehiculosJugador();
                     if (listaVehiculoJugador.size() != 0) {
-                        opcion = leer.nextInt() - 1;
-                        if(listaVehiculoJugador.get(opcion).getFlagAtaqueV2()==0){
+                        try {
+                            opcion = leer.nextInt() - 1;
+                        } catch (Exception e) {
+                            System.err.println("Ingrese un tipo de dato valido");
+                        }
+                        if (listaVehiculoJugador.size() - 1 < opcion) {
+                            System.err.println("Ingrese una opcion valida");
+                            return;
+                        }
+                        if (listaVehiculoJugador.get(opcion).getFlagAtaqueV2() == 0) {
                             cm_enemigo.atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion));
                             listaVehiculoJugador.remove(opcion);
                             System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
-                        }else{
+                        } else {
                             System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
                         }
                         return;
@@ -287,8 +395,21 @@ public class Jugador {
         Scanner leer = new Scanner(System.in);
         Scanner leer2 = new Scanner(System.in);
         mostrarEdificiosJugador();
+        if (listaEdificiosJugador.size() == 0) {
+            System.err.println("No tienes ningun edificio :´(");
+            return;
+        }
         System.out.println("¿A que edificio mandara tropas a defender?");
-        opcionEdificio = leer.nextInt() - 1;
+        try {
+            opcionEdificio = leer.nextInt() - 1;
+        } catch (Exception e) {
+            System.err.println("Ingrese un tipo de dato valido");
+            return;
+        }
+        if (listaEdificiosJugador.size() - 1 < opcionEdificio) {
+            System.err.println("Ingrese una opcion valida");
+            return;
+        }
         Edificacion e = listaEdificiosJugador.get(opcionEdificio);
         if (e.atacantes.isEmpty() && e.atacantes_Vehiculo.isEmpty()) {
             System.out.println("No estas siendo atacado");
@@ -303,23 +424,58 @@ public class Jugador {
                     System.out.println(i + " " + m.toString());
                     i++;
                 }
-                opcion = leer.nextInt() - 1;
+                try {
+                    opcion = leer.nextInt() - 1;
+                } catch (Exception error) {
+                    System.err.println("Seleccione un tipo de dato valido");
+                    return;
+                }
+                if (e.atacantes.size() - 1 < opcion) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 break;
             case 2:
                 System.out.println("¿A que vehicula atacara?");
                 for (Vehiculo v : e.atacantes_Vehiculo) {
                     System.out.println(i + " " + v.toString());
                 }
-                opcion = leer.nextInt() - 1;
+                try {
+                    opcion = leer.nextInt() - 1;
+                } catch (Exception err) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (e.atacantes_Vehiculo.size() - 1 < opcion) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 break;
+            default:
+                System.err.println("Seleccione una opcion valida");
+                return;
         }
         System.out.println("¿A que tipo de unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
-        opciontipoAtacar = leer.nextInt();
+        try {
+            opciontipoAtacar = leer.nextInt();
+        } catch (Exception err) {
+            System.err.println("Ingrese un tipo de dato valido");
+            return;
+        }
         switch (opciontipoAtacar) {
             case 1:
                 System.out.println("¿A que unidad mandara?");
                 mostrarMiliciaJugador();
-                opcion1 = leer2.nextInt() - 1;
+                try {
+                    opcion1 = leer2.nextInt() - 1;
+                } catch (Exception err) {
+                    System.out.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (listaMiliciaJugador.size() - 1 < opcion1) {
+                    System.out.println("Ingrese una opcion valida");
+                    return;
+                }
                 if (listaMiliciaJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         e.atacantes.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
@@ -354,7 +510,16 @@ public class Jugador {
             case 2:
                 System.out.println("¿A que vehicula mandara");
                 mostrarVehiculosJugador();
-                opcion1 = leer2.nextInt() - 1;
+                try {
+                    opcion1 = leer2.nextInt() - 1;
+                } catch (Exception err) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (listaVehiculoJugador.size() - 1 < opcion1) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 if (listaVehiculoJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         e.atacantes.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
@@ -390,8 +555,6 @@ public class Jugador {
         }
     }
 
-    
-
     public void defenderCentrodeMando() {
         int opcion = 0;
         int opcion1 = 0;
@@ -400,32 +563,83 @@ public class Jugador {
         int i = 1;
         Scanner leer = new Scanner(System.in);
         Scanner leer2 = new Scanner(System.in);
+        if (centro_mando.atacantes.size() == 0 && centro_mando.atacantes_Vehiculo.size() == 0) {
+            System.err.println("No estas siendo atacado");
+            return;
+        }
         System.out.println("A que tipo de unidad atacaras?\n1.Milicia\n2.Vehiculo");
-        opciontipoAtacantes = leer.nextInt();
+        try {
+            opciontipoAtacantes = leer.nextInt();
+        } catch (Exception err) {
+            System.err.println("Ingrese un tipo de dato valido");
+            return;
+        }
+
         switch (opciontipoAtacantes) {
             case 1:
                 System.out.println("¿A que unidad atacara?");
+                if (centro_mando.atacantes.size() == 0) {
+                    System.err.println("No hay unidades atacando a esta edificacion");
+                    return;
+                }
                 for (Milicia m : centro_mando.atacantes) {
                     System.out.println(i + " " + m.toString());
                     i++;
                 }
-                opcion = leer.nextInt() - 1;
+                try {
+                    opcion = leer.nextInt() - 1;
+                } catch (Exception e) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                }
+                if (centro_mando.atacantes.size() - 1 < opcion) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 break;
             case 2:
                 System.out.println("¿A que vehicula atacara?");
+                if (centro_mando.atacantes_Vehiculo.size() == 0) {
+                    System.err.println("No hay unidades atacando a esta edificacion");
+                    return;
+                }
                 for (Vehiculo v : centro_mando.atacantes_Vehiculo) {
                     System.out.println(i + " " + v.toString());
                 }
-                opcion = leer.nextInt() - 1;
+                try {
+                    opcion = leer.nextInt() - 1;
+                } catch (Exception e) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (centro_mando.atacantes_Vehiculo.size() - 1 < opcion) {
+                    System.err.println("Ingrese una opcion valida");
+                }
                 break;
+            default:
+                System.err.println("Ingrese un tipo de dato valido");
+                return;
         }
         System.out.println("¿A que tipo de unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
-        opciontipoAtacar = leer.nextInt();
+        try {
+            opciontipoAtacar = leer.nextInt();
+        } catch (Exception err) {
+            System.err.println("Ingrese un tipo de dato valido");
+            return;
+        }
         switch (opciontipoAtacar) {
             case 1:
                 System.out.println("¿A que unidad mandara?");
                 mostrarMiliciaJugador();
-                opcion1 = leer2.nextInt() - 1;
+                try {
+                    opcion1 = leer2.nextInt() - 1;
+                } catch (Exception err) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (listaMiliciaJugador.size() - 1 < opcion1) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 if (listaMiliciaJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         centro_mando.atacantes.get(opcion).operar_Vida(-listaMiliciaJugador.get(opcion1).getAtaque());
@@ -460,7 +674,16 @@ public class Jugador {
             case 2:
                 System.out.println("¿A que vehicula mandara");
                 mostrarVehiculosJugador();
-                opcion1 = leer2.nextInt() - 1;
+                try {
+                    opcion1 = leer2.nextInt() - 1;
+                } catch (Exception err) {
+                    System.err.println("Ingrese un tipo de dato valido");
+                    return;
+                }
+                if (listaVehiculoJugador.size() - 1 < opcion1) {
+                    System.err.println("Ingrese una opcion valida");
+                    return;
+                }
                 if (listaVehiculoJugador.get(opcion1).getFlagDefensa() == 0) {
                     if (opciontipoAtacantes == 1) {
                         centro_mando.atacantes.get(opcion).operar_Vida(-listaVehiculoJugador.get(opcion1).getAtaque());
@@ -492,24 +715,12 @@ public class Jugador {
                     return;
                 }
                 break;
+            default:
+                System.err.println("Ingrese un tipo de dato valido");
+                return;
+
         }
 
-//        if (centro_mando.atacantes.get(opcion).getVida() <= 0) {
-//            System.out.println("Has eliminado a la unidad enemiga");
-//            centro_mando.atacantes.remove(opcion);
-//        }
-//        if (listaMiliciaJugador.get(opcion1).getVida() <= 0) {
-//            System.out.println("Han eliminado a tu unidad");
-//            listaMiliciaJugador.remove(opcion1);
-//        }
-//        if (centro_mando.atacantes_Vehiculo.get(opcion).getVida() <= 0) {
-//            System.out.println("Has destruido al vehiculo enemigo");
-//            centro_mando.atacantes_Vehiculo.remove(opcion);
-//        }
-//        if (listaVehiculoJugador.get(opcion1).getVida() <= 0) {
-//            System.out.println("Han destruido a tu vehiculo");
-//            listaVehiculoJugador.remove(opcion1);
-//        }
     }
 
     public void mostrarEdificiosJugador() {

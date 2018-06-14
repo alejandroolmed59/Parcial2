@@ -140,13 +140,13 @@ public class Juego {
                         J.centro_mando.mejorar();
                         break;
                     case 3:
-                        J.crear("Milicia");
+                        J.crear("Milicia", fase);
                         break;
                     case 4:
                         J.construir(fase);
                         break;
                     case 5:
-                        J.crear("Vehiculo");
+                        J.crear("Vehiculo", fase);
                         break;
                     case 6:
                         J.mostrarMiliciaJugador();
@@ -259,6 +259,14 @@ public class Juego {
                     flag_FindeJuego = 1;
                     return;
                 }
+                i++;
+            }
+        }
+        i=0;
+        for (Map.Entry<Vehiculo, Integer> entry : j.mapadeEspera_Vehiculo.entrySet()) {
+            if (entry.getValue() == fase) {
+                j.listaVehiculoJugador.add(entry.getKey());
+                System.out.println("Se ha terminado de construir " + entry.getKey().nombre + " , " + j.nombre_jugador);
                 i++;
             }
         }

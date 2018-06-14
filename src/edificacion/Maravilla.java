@@ -15,7 +15,7 @@ import raza.Raza;
 public class Maravilla extends Edificacion {
     @Override
     public void Iniciar(){
-        this.vida=20000000;
+        this.vida=1000000000;
         this.costo_comida=20000;
         this.costo_oro=6000;
         this.costo_piedra=10000;

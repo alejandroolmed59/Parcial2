@@ -13,10 +13,10 @@ public class Cannion extends Vehiculo{
     @Override
     public void Iniciar(){
         this.ataque=100;
-        this.vida=400;
+        this.vida=450;
         this.costo_comida=750;
-        this.costo_oro=500;
-        this.costo_piedra=1000;
+        this.costo_oro=300;
+        this.costo_piedra=700;
         this.nombre="Cañon";
         this.descripcion_extra="\u001B[1;31m"+"Exclusivo de la edad feudal"+"\u001B[0m";
         this.cooldown=1;

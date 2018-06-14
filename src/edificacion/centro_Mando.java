@@ -7,6 +7,7 @@ package edificacion;
 
 import Vehiculo.Vehiculo;
 import java.util.ArrayList;
+import java.util.Scanner;
 import raza.Milicia;
 
 /**
@@ -19,7 +20,7 @@ public class centro_Mando{
     public int numeroDeMejora=1;
     int vida=600,  flagRecolectar=1;
     double max_oro=3000, max_piedra=5000, max_comida=10000;
-    double oro_jugador=1000, piedra_jugador=800, comida_jugador=1000;
+    double oro_jugador=300, piedra_jugador=500, comida_jugador=1000;
     public centro_Mando(double oro, double piedra, double comida, int vida) {
         this.oro_jugador+= oro;
         this.piedra_jugador+= piedra;
@@ -30,6 +31,11 @@ public class centro_Mando{
     public void mejorar() {
         switch(numeroDeMejora){
             case 1:
+                System.out.println("Avanzar a la edad feudal consumira. Comida: "+((max_comida*1.1)*0.25)+" piedra: "+((max_piedra*1.1)*0.25)+" Oro: "+((max_oro*1.1)*0.25));
+                
+                if(!confirmar()){
+                    return;
+                }
                 if(comida_jugador>((max_comida*1.1)*0.25) && piedra_jugador>((max_piedra*1.1)*0.25)  && oro_jugador>((max_oro*1.1)*0.25)){
                     comida_jugador-=((max_comida*1.1)*0.25);
                     piedra_jugador-= ((max_piedra*1.1)*0.25);
@@ -45,6 +51,8 @@ public class centro_Mando{
                 }
                 break;
             case 2:
+                System.out.println("Avanzar a la edad de los castillos consumira. Comida: "+((max_comida*1.3)*0.25)+" Piedra: "+((max_piedra*1.3)*0.25)+" Oro: "+((max_oro*1.3)*0.25));
+                if(!confirmar()){return;}
                 if(comida_jugador>((max_comida*1.3)*0.25) && piedra_jugador>((max_piedra*1.3)*0.25)  && oro_jugador>((max_oro*1.3)*0.25)){
                     comida_jugador-=((max_comida*1.3)*0.25);
                     piedra_jugador-= ((max_piedra*1.3)*0.25);
@@ -58,7 +66,9 @@ public class centro_Mando{
                     System.out.println("No tiene los suficientes recursos para avanzar a la edad de los castillos");
                 }
                 break;
-            case 3:
+            case 3:       
+                System.out.println("Avanzar a la edad imperial consumira. Comida: "+((max_comida*1.5)*0.25)+" Piedra: "+((max_piedra*1.5)*0.25)+" Oro: "+((max_oro*1.5)*0.25));
+                if(!confirmar()){return;}
                 if(comida_jugador>((max_comida*1.5)*0.25) && piedra_jugador>((max_piedra*1.5)*0.25)  && oro_jugador>((max_oro*1.5)*0.25)){
                     comida_jugador-=((max_comida*1.5)*0.25);
                     piedra_jugador-= ((max_piedra*1.5)*0.25);
@@ -77,6 +87,25 @@ public class centro_Mando{
                 break;
         }
         
+    }
+    private boolean confirmar(){
+        System.out.println("1. Para confirmar\n0.Volver");
+        Scanner leer = new Scanner(System.in);
+        int opcion;
+        while(true){
+            try{
+                opcion=leer.nextInt();
+                break;
+            }catch(Exception err){
+                System.out.println("Ingrese un tipo de dato valido");
+                leer.nextLine();
+            }
+        }
+        if(opcion==1){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void operar_Oro_jugador(double precio) {
@@ -121,7 +150,8 @@ public class centro_Mando{
 
     @Override
     public String toString() {
-        return "centro_Mando{" + "vida=" + vida + ", max_oro=" + max_oro + ", max_piedra=" + max_piedra + ", max_comida=" + max_comida + "\noro_jugador=" + oro_jugador + ", piedra_jugador=" + piedra_jugador + ", comida_jugador=" + comida_jugador + '}'+"\nMilicia atacantes: "+atacantes+"\nVehiculos atacantes: "+atacantes_Vehiculo+"\n";
+        return "Centro de Mando " + " vida:" + vida + "\n   Oro: "+oro_jugador+"/"+max_oro+"\n  Piedra: "+piedra_jugador+"/"+max_piedra+
+                "\n Comida: "+comida_jugador+"/"+max_comida+"\nMilicia atacantes: "+atacantes+"\nVehiculos atacantes: "+atacantes_Vehiculo+"\n";
     }
 
 }
