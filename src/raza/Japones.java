@@ -14,7 +14,7 @@ public class Japones extends Raza{
     public void Iniciar(){
         this.oroBonus=600;
         this.piedraBonus=100;
-        this.comidaBonus=600;
+        this.comidaBonus=400;
         this.vida_centroMandoBonus=-100;
         this.cooldownEdificacionesBonus=1;
         this.ataque=ataque+80;
