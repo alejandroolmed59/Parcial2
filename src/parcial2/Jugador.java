@@ -138,6 +138,10 @@ public class Jugador {
                 i++;
             }
         }
+        if(temp.isEmpty()){
+            System.err.println("No tienes edificaciones que recolecten recursos");
+            return;
+        }
         try {
             opcion = leer.nextInt() - 1;
         } catch (Exception e) {
@@ -355,7 +359,7 @@ public class Jugador {
                         }
                         return;
                     }
-                    System.out.println("No tienes milicia preparada para atacar!");
+                    System.err.println("No tienes milicia preparada para atacar!");
                     return;
                 case 2:
                     System.out.println("Cual vehiculo mandaras al ataque?");
@@ -378,6 +382,8 @@ public class Jugador {
                             System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
                         }
                         return;
+                    }else{
+                        System.err.println("No tienes vehiculos listos para atacar");
                     }
             }
         } else {

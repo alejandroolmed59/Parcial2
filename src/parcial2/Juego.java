@@ -60,6 +60,7 @@ public class Juego {
         mar.Iniciar();
         t.Iniciar();
         cannion.Iniciar();
+        System.out.println("\u001B[31m"+"----AGE OF EMPIRES 2: JAVA TEXT EDITION----"+"\u001B[0m");
         jugador1 = new Jugador();
         System.out.println("");
         jugador2 = new Jugador();
@@ -109,26 +110,26 @@ public class Juego {
         System.out.println("----- MENÚ -----");
         System.out.println("");
         System.out.println("1. Atacar");
-        System.out.println("2. Avanzar de edad(mejorar Centro de mando)");
+        System.out.println("2. Defender Edificio");
         System.out.println("3. Entrenar a tu milicia");
-        System.out.println("4. Construir edificios");
-        System.out.println("5. Construir vehiculos");
+        System.out.println("4. Construir vehiculos");
+        System.out.println("5. Construir edificios");
         System.out.println("6. Ver milicia");
-        System.out.println("7. Ver edificios");
-        System.out.println("8. Ver estado de centro de mando");
-        System.out.println("9. Pasar turno y generar recursos");
-        System.out.println("10. Defender edificio");
-        System.out.println("11. Defender centro de mando");
-        System.out.println("\u001B[35m" + "12. Atacar centro de mando" + "\u001B[0m");
-        System.out.println("13. Ver vehiculos");
-        System.out.println("14. Recolectar recursos");
+        System.out.println("7. Ver vehiculos");
+        System.out.println("8. Ver edificios");
+        System.out.println("9. Ver estado del centro de mando");
+        System.out.println("10. Recolectar recursos");
+        System.out.println("11. Avanzar de edad");
+        System.out.println("12. Defender centro de mando");
+        System.out.println("\u001B[35m" + "13. Atacar centro de mando" + "\u001B[0m");
+        System.out.println("14. Pasar turno y generar recursos");
         System.out.println("");
     }
 
     public void menu(Jugador J, ArrayList<Edificacion> edificios_enemigos, centro_Mando cm_enemigo) {
         int opcion = 0;
         Scanner leer = new Scanner(System.in);
-        while (opcion != 9) {
+        while (opcion != 14) {
             opciones();
             try {
                 opcion = leer.nextInt();
@@ -137,43 +138,44 @@ public class Juego {
                         J.atacar(edificios_enemigos);
                         break;
                     case 2:
-                        J.centro_mando.mejorar();
+                        J.defender();
+                        
                         break;
                     case 3:
                         J.crear("Milicia", fase);
                         break;
                     case 4:
-                        J.construir(fase);
+                        J.crear("Vehiculo", fase);                       
                         break;
                     case 5:
-                        J.crear("Vehiculo", fase);
+                        J.construir(fase);
                         break;
                     case 6:
                         J.mostrarMiliciaJugador();
                         break;
                     case 7:
-                        J.mostrarEdificiosJugador();
+                        J.mostrarVehiculosJugador();                        
                         break;
                     case 8:
-                        System.out.println(J.centro_mando.toString());
+                        J.mostrarEdificiosJugador();                       
                         break;
                     case 9:
-                        J.generar();
+                        System.out.println(J.centro_mando.toString());                      
                         break;
                     case 10:
-                        J.defender();
+                        J.recolectar();
                         break;
                     case 11:
-                        J.defenderCentrodeMando();
+                        J.centro_mando.mejorar();                        
                         break;
                     case 12:
-                        J.atacarCentrodeMando(edificios_enemigos, cm_enemigo);
+                        J.defenderCentrodeMando();                      
                         break;
                     case 13:
-                        J.mostrarVehiculosJugador();
+                        J.atacarCentrodeMando(edificios_enemigos, cm_enemigo);
                         break;
                     case 14:
-                        J.recolectar();
+                        J.generar();
                         break;
                 }
             } catch (InputMismatchException e) {
