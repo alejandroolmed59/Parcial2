@@ -278,6 +278,7 @@ public class Jugador {
         }
         if (edificios_enemigos.size() - 1 < opcion) {
             System.err.println("Ingrese una opcion valida");
+            return;
         }
 
         System.out.println("Que unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
