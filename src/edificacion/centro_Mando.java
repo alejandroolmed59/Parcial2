@@ -27,7 +27,9 @@ public class centro_Mando{
         this.comida_jugador+= comida;
         this.vida += vida; 
     }
-    
+    /**
+     * Funcion para poder avanzar por las edades y desbloquear nuevas edificaciones y ampliar la capacidad maxima
+     */
     public void mejorar() {
         switch(numeroDeMejora){
             case 1:
@@ -88,6 +90,10 @@ public class centro_Mando{
         }
         
     }
+    /**
+     * Confirmar que se quiere avanzar de edad y descontar los recursos
+     * @return true si asi se quiere, false de lo contrario
+     */
     private boolean confirmar(){
         System.out.println("1. Para confirmar\n0.Volver");
         Scanner leer = new Scanner(System.in);

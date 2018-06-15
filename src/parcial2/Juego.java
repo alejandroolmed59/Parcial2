@@ -60,7 +60,7 @@ public class Juego {
         mar.Iniciar();
         t.Iniciar();
         cannion.Iniciar();
-        System.out.println("\u001B[31m"+"----AGE OF EMPIRES 2: JAVA TEXT EDITION----"+"\u001B[0m");
+        System.out.println("\u001B[31m" + "----AGE OF EMPIRES 2: JAVA TEXT EDITION----" + "\u001B[0m");
         jugador1 = new Jugador();
         System.out.println("");
         jugador2 = new Jugador();
@@ -73,6 +73,12 @@ public class Juego {
         return Obj;
     }
 
+    /**
+     * Donde ocurre la ejecucion principal del juego, al principio de los turnos
+     * de los jugadores se ataca, se construye en caso de ser posible y al final
+     * de resetean las flags para defender y recolectar recursos. En caso de que
+     * la flag de juego se setee a 1, significa que un jugador gano
+     */
     public void Jugar() {
         turno();
         System.out.println("Empezaras tu " + listaPlayers.get(0).nombre_jugador);
@@ -105,6 +111,9 @@ public class Juego {
         }
     }
 
+    /**
+     * Printeo del menu principal
+     */
     public void opciones() {
         System.out.println("");
         System.out.println("----- MENÚ -----");
@@ -126,6 +135,13 @@ public class Juego {
         System.out.println("");
     }
 
+    /**
+     * Se mandan a llamar todas las funciones principales del programa
+     *
+     * @param J Necesario para saber quien esta jugando
+     * @param edificios_enemigos Se necesita para atacar al enemigo
+     * @param cm_enemigo Se necesita para atacar al enemigo
+     */
     public void menu(Jugador J, ArrayList<Edificacion> edificios_enemigos, centro_Mando cm_enemigo) {
         int opcion = 0;
         Scanner leer = new Scanner(System.in);
@@ -139,13 +155,13 @@ public class Juego {
                         break;
                     case 2:
                         J.defender();
-                        
+
                         break;
                     case 3:
                         J.crear("Milicia", fase);
                         break;
                     case 4:
-                        J.crear("Vehiculo", fase);                       
+                        J.crear("Vehiculo", fase);
                         break;
                     case 5:
                         J.construir(fase);
@@ -154,22 +170,22 @@ public class Juego {
                         J.mostrarMiliciaJugador();
                         break;
                     case 7:
-                        J.mostrarVehiculosJugador();                        
+                        J.mostrarVehiculosJugador();
                         break;
                     case 8:
-                        J.mostrarEdificiosJugador();                       
+                        J.mostrarEdificiosJugador();
                         break;
                     case 9:
-                        System.out.println(J.centro_mando.toString());                      
+                        System.out.println(J.centro_mando.toString());
                         break;
                     case 10:
                         J.recolectar();
                         break;
                     case 11:
-                        J.centro_mando.mejorar();                        
+                        J.centro_mando.mejorar();
                         break;
                     case 12:
-                        J.defenderCentrodeMando();                      
+                        J.defenderCentrodeMando();
                         break;
                     case 13:
                         J.atacarCentrodeMando(edificios_enemigos, cm_enemigo);
@@ -185,19 +201,30 @@ public class Juego {
         }
     }
 
+    /**
+     * Shuffle hace que el jugador que empieza sea aleatorio
+     */
     public void turno() {
         listaPlayers.add(jugador1);
         listaPlayers.add(jugador2);
         Collections.shuffle(listaPlayers);
     }
 
+    /**
+     * En caso de que hayan Atacantes en las listas y que ya hayan pasado 2
+     * turnos, se ataca
+     *
+     * @param j Para saber quien ataca
+     * @param listaEdificiosJugador_enemigo
+     * @param cm_enemigo
+     */
     public void ataqueInicioTurno(Jugador j, ArrayList<Edificacion> listaEdificiosJugador_enemigo, centro_Mando cm_enemigo) {
-        int flagHechiza=0;
+        int flagHechiza = 0;
         for (Edificacion e : listaEdificiosJugador_enemigo) {
             if (e.atacantes.size() != 0) {
                 for (Milicia m : e.atacantes) {
                     if (m.getFlagAtaque() == 0) {
-                        flagHechiza=1;
+                        flagHechiza = 1;
                         e.vida -= m.getAtaque();
                     } else {
                         m.setFlagAtaque(0);
@@ -208,15 +235,15 @@ public class Juego {
             if (e.atacantes_Vehiculo.size() != 0) {
                 for (Vehiculo v : e.atacantes_Vehiculo) {
                     if (v.getFlagAtaque() == 0) {
-                        flagHechiza=1;
+                        flagHechiza = 1;
                         e.vida -= v.ataque;
                     } else {
                         v.setFlagAtaque(0);
                     }
                 }
             }
-            if(flagHechiza==1){
-                System.out.println("Tus unidades atacaran ahora! "+j.nombre_jugador);
+            if (flagHechiza == 1) {
+                System.out.println("Tus unidades atacaran ahora! " + j.nombre_jugador);
             }
         }
         for (Milicia m : cm_enemigo.atacantes) {
@@ -239,6 +266,12 @@ public class Juego {
         }
     }
 
+    /**
+     * Se ejecutara al principio de turno para resetear la flag de defensa de
+     * las milicias y vehiculos y para la flag de recolectar del centro de mando
+     *
+     * @param j A cual jugador se le resetearan las flags
+     */
     public void resetFlagdeDefensa(Jugador j) {
         j.centro_mando.setFlagRecolectar(1);
         for (Milicia m : j.listaMiliciaJugador) {
@@ -251,6 +284,12 @@ public class Juego {
         }
     }
 
+    /**
+     * En caso de que haya pasado ya las fases necesarias se crea la edificacion
+     * correspondiente
+     *
+     * @param j Para saber que jugador se va a intentar construir
+     */
     public void construir(Jugador j) {
         int i = 0;
         for (Map.Entry<Edificacion, Integer> entry : j.mapadeEspera.entrySet()) {
@@ -264,7 +303,7 @@ public class Juego {
                 i++;
             }
         }
-        i=0;
+        i = 0;
         for (Map.Entry<Vehiculo, Integer> entry : j.mapadeEspera_Vehiculo.entrySet()) {
             if (entry.getValue() == fase) {
                 j.listaVehiculoJugador.add(entry.getKey());

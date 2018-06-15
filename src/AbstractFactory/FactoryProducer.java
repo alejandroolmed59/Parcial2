@@ -12,6 +12,11 @@ import raza.FactoryRaza;
  * @author Alejandro Olmedo <00097017@uca.edu.sv>
  */
 public class FactoryProducer {
+    /**
+     * Devuelve un tipo de factory
+     * @param type Nombre de la factory que queremos
+     * @return Factory a conveniencia
+     */
     public static AbstractFactory getFactory(String type){
         switch (type){
             case "Raza":

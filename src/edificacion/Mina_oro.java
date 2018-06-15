@@ -39,6 +39,7 @@ public class Mina_oro extends Edificacion{
     public centro_Mando recolectar(centro_Mando cm){
         if(cm.oro_jugador+recurso<cm.max_oro){
             cm.operar_Oro_jugador(recurso);
+            recurso=0;
             cm.flagRecolectar=0;
             return cm;
         }

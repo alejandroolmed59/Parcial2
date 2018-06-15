@@ -11,8 +11,17 @@ package Vehiculo;
  */
 public abstract class Vehiculo {
 
-    public int ataque = 0, vida = 0, cooldown = 0, flagDefensa=1, flagAtaque=1, flagAtaqueV2=1, id = Vehiculo.this.hashCode();
+    public int ataque = 0, vida = 0, cooldown = 0, flagDefensa = 1, flagAtaque = 1, flagAtaqueV2 = 1, id = Vehiculo.this.hashCode();
 
+    /**
+     * La flagAtaqueV2 se usara para corroborar que en ese mismo turno no fue
+     * creada y asi poderla añadirla a la lista de atacantes de la edificacione
+     * enemiga, 
+     * flagAtaque es para corrobarar que hayan pasado dos turnos desde
+     * que se añadio para empezar a hacer daño a la edificacion enemiga
+     *
+     * @return
+     */
     public int getFlagAtaqueV2() {
         return flagAtaqueV2;
     }
@@ -27,7 +36,7 @@ public abstract class Vehiculo {
 
     @Override
     public String toString() {
-        return "{ "+nombre + " id= " + id + ", ataque=" + ataque + ", vida=" + vida + '}';
+        return "{ " + nombre + " id= " + id + ", ataque=" + ataque + ", vida=" + vida + '}';
     }
 
     public int getAtaque() {
@@ -41,8 +50,9 @@ public abstract class Vehiculo {
     public int getFlagDefensa() {
         return flagDefensa;
     }
-    public void operar_Vida(int vida){
-        this.vida+= vida;
+
+    public void operar_Vida(int vida) {
+        this.vida += vida;
     }
 
     public int getFlagAtaque() {

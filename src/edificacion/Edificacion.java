@@ -21,11 +21,11 @@ public abstract class Edificacion {
     public boolean isRecolectable=false;
     public String nombre="", descripcion_extra="";
     public double costo_oro=0, costo_piedra=0, costo_comida=0,capacidad_recursos_max, recurso;
-    abstract public void Iniciar();
-    abstract public centro_Mando recolectar(centro_Mando cm);
-    abstract public centro_Mando generar(centro_Mando cm);
-    abstract public Milicia crearSoldado(Raza raza);
-    abstract public void almacenar();
+    abstract public void Iniciar(); //Se inicializa la edificacion y se setean las stats
+    abstract public centro_Mando recolectar(centro_Mando cm); //Recolecta manual 1 vez por turno
+    abstract public centro_Mando generar(centro_Mando cm); //Se utilizara para modificar automaticamente al final del turno los valores de los recursos en el CENTRO DE MANDO
+    abstract public Milicia crearSoldado(Raza raza); //Se usa en los cuarteles para crear milicia
+    abstract public void almacenar(); //Se utilizara para modificar automaticamente al final del turno los valores de los recursos en LAS EDIFICACIONES
 
     @Override
     public String toString() {

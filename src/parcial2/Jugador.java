@@ -65,6 +65,13 @@ public class Jugador {
         centro_mando = new centro_Mando(civilizacion.oroBonus, civilizacion.piedraBonus, civilizacion.comidaBonus, civilizacion.vida_centroMandoBonus);
     }
 
+    /**
+     * Construye una edificacion para el jugador, se añade a su lista personal
+     * de edificaciones
+     *
+     * @param fase Fase actual del juego pasar saber en cuantas fases se
+     * terminar de construir dependiendo del tiempo de construccion
+     */
     public void construir(int fase) {
         listaEdificaciones lista = listaEdificaciones.getInstance();
         lista.mostrar();
@@ -100,12 +107,12 @@ public class Jugador {
             centro_mando.operar_Comida_jugador(-e.costo_comida);
             centro_mando.operar_Oro_jugador(-e.costo_oro);
             centro_mando.operar_Piedra_jugador(-e.costo_piedra);
-            int tiempoNeto=e.cooldown-civilizacion.cooldownEdificacionesBonus;
+            int tiempoNeto = e.cooldown - civilizacion.cooldownEdificacionesBonus;
             int espera = (tiempoNeto + fase);
             //listaEdificiosJugador.add(e);
-            if (tiempoNeto  == 0) {
+            if (tiempoNeto == 0) {
                 listaEdificiosJugador.add(e);
-                System.out.println("Se ha terminado de construir " +e.nombre+ " , " +nombre_jugador);
+                System.out.println("Se ha terminado de construir " + e.nombre + " , " + nombre_jugador);
             } else {
                 mapadeEspera.put(e, espera);
                 System.out.println("Se empezo a construir la edificacion, estara lista dentro de " + tiempoNeto + " fase/s, es decir la fase " + (espera));
@@ -115,6 +122,10 @@ public class Jugador {
         }
     }
 
+    /**
+     * Genera los recursos para el cm y para las edificaciones, es llamado luego
+     * en la clase Menu antes del inicio del turno del jugador
+     */
     public void generar() {
         for (Edificacion e : listaEdificiosJugador) {
             centro_mando = e.generar(centro_mando);
@@ -122,6 +133,10 @@ public class Jugador {
         }
     }
 
+    /**
+     * Recolectar los recursos manualmente(Solo puede recolectarse una vez por
+     * turno)
+     */
     public void recolectar() {
         if (centro_mando.getFlagRecolectar() == 0) {
             System.err.println("Solo se pueden recolectar recursos 1 vez por turno!!");
@@ -138,7 +153,7 @@ public class Jugador {
                 i++;
             }
         }
-        if(temp.isEmpty()){
+        if (temp.isEmpty()) {
             System.err.println("No tienes edificaciones que recolecten recursos");
             return;
         }
@@ -157,6 +172,13 @@ public class Jugador {
 
     }
 
+    /**
+     * Se puede alternar para crear un tipo de dato tipo vehiculo o milicia
+     *
+     * @param tipo Para diferenciar si se quiere una Milicia o Vehiculo
+     * @param fase Fase actual para calcular el tiempo de espera de construccion
+     * de los vehiculos
+     */
     public void crear(String tipo, int fase) {
         switch (tipo) {
             case "Milicia":
@@ -223,6 +245,14 @@ public class Jugador {
         }
     }
 
+    /**
+     * Mandar a atacar a Milicia o Vehiculos a los edificios enemigos, se
+     * transladan de nuestro ArrayList al de ellos. Tambien puede ocurrir que
+     * mueran en el intento de llegar.
+     *
+     * @param edificios_enemigos Donde se añadiran nuestros atacantes que antes
+     * estaban en nuestro ArrayList
+     */
     public void atacar(ArrayList<Edificacion> edificios_enemigos) {
         if (edificios_enemigos.isEmpty()) {
             System.out.println("El enemigo no posee edificaciones. Es buen momento para atacar" + "\u001B[1;31m" + " el centro de mando!!" + "\u001B[0m");
@@ -255,6 +285,7 @@ public class Jugador {
             opciontipo = leer.nextInt();
         } catch (Exception e) {
             System.err.println("Ingrese un tipo de dato valido");
+            return;
         }
         switch (opciontipo) {
             case 1:
@@ -265,6 +296,7 @@ public class Jugador {
                         opcion2 = leer2.nextInt() - 1;
                     } catch (Exception e) {
                         System.err.println("Ingrese un tipo de dato valido");
+                        return;
                     }
                     if (listaMiliciaJugador.size() - 1 < opcion2) {
                         System.err.println("Ingrese una opcion valida");
@@ -272,7 +304,7 @@ public class Jugador {
                     }
                     if (listaMiliciaJugador.get(opcion2).getFlagAtaqueV2() == 0) {
                         int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
-                        System.out.println(randomNum);
+                        //System.out.println(randomNum); BLESS RNG
                         if (randomNum <= civilizacion.bad_luck) {
                             System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu milicia ha sido deborada por lobos salvajes en el camino :(" + "\u001B[0m");
                             listaMiliciaJugador.remove(opcion2);
@@ -296,6 +328,7 @@ public class Jugador {
                         opcion2 = leer2.nextInt() - 1;
                     } catch (Exception e) {
                         System.err.println("Ingrese un tipo de dato valido");
+                        return;
                     }
                     if (listaVehiculoJugador.size() - 1 < opcion2) {
                         System.err.println("Ingrese una opcion valida");
@@ -303,7 +336,7 @@ public class Jugador {
                     }
                     if (listaVehiculoJugador.get(opcion2).getFlagAtaqueV2() == 0) {
                         int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
-                        System.out.println(randomNum);
+                        //System.out.println(randomNum); BLESSS RNG
                         if (randomNum <= civilizacion.bad_luck) {
                             System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu vehiculo ha explotado en el camino :(" + "\u001B[0m");
                             listaVehiculoJugador.remove(opcion2);
@@ -324,16 +357,25 @@ public class Jugador {
         }
     }
 
+    /**
+     * Se añadiaran nuestras tropas al centro de mando enemigo siempre y cuando
+     * ya no existan otros edificios enemigos a nuestras tropas tambien les
+     * puede suceder que nunca llegan por tener mala suerte :´0
+     *
+     * @param edificios_enemigos Para comprobar que ya no exista ninguno en pie
+     * @param cm_enemigo Se añadiran a la lista de atacantes del centro de mando
+     */
     public void atacarCentrodeMando(ArrayList<Edificacion> edificios_enemigos, centro_Mando cm_enemigo) {
         if (edificios_enemigos.isEmpty()) {
-            int opcion = 0;
-            int opciontipo = 0;
+            int opcion;
+            int opciontipo;
             Scanner leer = new Scanner(System.in);
             System.out.println("Que unidad mandaras al ataque?\n1.Milicia\n2.Vehiculo");
             try {
                 opciontipo = leer.nextInt();
             } catch (Exception e) {
                 System.out.println("Ingrese un tipo de dato valido");
+                return;
             }
             switch (opciontipo) {
                 case 1:
@@ -351,6 +393,13 @@ public class Jugador {
                             return;
                         }
                         if (listaMiliciaJugador.get(opcion).getFlagAtaqueV2() == 0) {
+                            int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
+                            //System.out.println(randomNum); BLESS RNG
+                            if (randomNum <= civilizacion.bad_luck) {
+                                System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu milicia ha sido brutalmente destrozada por razones desconocidas:(" + "\u001B[0m");
+                                listaVehiculoJugador.remove(opcion);
+                                return;
+                            }
                             cm_enemigo.atacantes.add(listaMiliciaJugador.get(opcion));
                             listaMiliciaJugador.remove(opcion);
                             System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
@@ -369,12 +418,20 @@ public class Jugador {
                             opcion = leer.nextInt() - 1;
                         } catch (Exception e) {
                             System.err.println("Ingrese un tipo de dato valido");
+                            return;
                         }
                         if (listaVehiculoJugador.size() - 1 < opcion) {
                             System.err.println("Ingrese una opcion valida");
                             return;
                         }
                         if (listaVehiculoJugador.get(opcion).getFlagAtaqueV2() == 0) {
+                            int randomNum = ThreadLocalRandom.current().nextInt(0, 100 + 1);
+                            //System.out.println(randomNum); BLESS RNG
+                            if (randomNum <= civilizacion.bad_luck) {
+                                System.out.println("\u001B[31m" + "Oh no! Has tenido mala suerte, tu vehiculo ha explotado en el camino :(" + "\u001B[0m");
+                                listaVehiculoJugador.remove(opcion);
+                                return;
+                            }
                             cm_enemigo.atacantes_Vehiculo.add(listaVehiculoJugador.get(opcion));
                             listaVehiculoJugador.remove(opcion);
                             System.out.println("Atacaras al centro de mando al principio de tu siguiente turno " + " ,vida=" + cm_enemigo.getVida());
@@ -382,7 +439,7 @@ public class Jugador {
                             System.out.println("No puedes mandar a atacar a un vehiculo que creaste este turno!");
                         }
                         return;
-                    }else{
+                    } else {
                         System.err.println("No tienes vehiculos listos para atacar");
                     }
             }
@@ -391,6 +448,9 @@ public class Jugador {
         }
     }
 
+    /**
+     * Funcion para defender nuestras edificaciones de las tropas enemigas
+     */
     public void defender() {
         int opcionEdificio = 0;
         int opcion = 0;
@@ -561,6 +621,9 @@ public class Jugador {
         }
     }
 
+    /**
+     * Defender nuestro centro de mando de las tropas enemigas
+     */
     public void defenderCentrodeMando() {
         int opcion = 0;
         int opcion1 = 0;
@@ -596,6 +659,7 @@ public class Jugador {
                     opcion = leer.nextInt() - 1;
                 } catch (Exception e) {
                     System.err.println("Ingrese un tipo de dato valido");
+                    return;
                 }
                 if (centro_mando.atacantes.size() - 1 < opcion) {
                     System.err.println("Ingrese una opcion valida");
@@ -619,6 +683,7 @@ public class Jugador {
                 }
                 if (centro_mando.atacantes_Vehiculo.size() - 1 < opcion) {
                     System.err.println("Ingrese una opcion valida");
+                    return;
                 }
                 break;
             default:
@@ -729,6 +794,9 @@ public class Jugador {
 
     }
 
+    /**
+     * Printear nuestros edificios
+     */
     public void mostrarEdificiosJugador() {
         int i = 1;
         for (Edificacion e : listaEdificiosJugador) {
@@ -737,6 +805,9 @@ public class Jugador {
         }
     }
 
+    /**
+     * Printear nuestros vehiculos
+     */
     public void mostrarVehiculosJugador() {
         int i = 1;
         for (Vehiculo v : listaVehiculoJugador) {
@@ -745,6 +816,9 @@ public class Jugador {
         }
     }
 
+    /**
+     * Printear nuestra Milicia
+     */
     public void mostrarMiliciaJugador() {
         int i = 1;
         for (Milicia m : listaMiliciaJugador) {
@@ -753,6 +827,10 @@ public class Jugador {
         }
     }
 
+    /**
+     * Funcion para comprobar que nuestras edificaciones no esten a 0 de salud,
+     * de ser asi se eliminan de nuestro arrayList de edificaciones
+     */
     public void isAlive() {
         ArrayList<Edificacion> temp = new ArrayList();
         for (Edificacion e : listaEdificiosJugador) {
